@@ -1,0 +1,907 @@
+/* ==============================
+Contact Page
+============================== */
+
+.contact-page {
+  position: relative;
+
+  width: min(1400px, 90%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 0 3rem;
+
+  overflow: hidden;
+}
+
+/* ==============================
+Decorative Background
+============================== */
+
+.contact-background-text {
+  position: absolute;
+  z-index: -1;
+  right: auto;
+  bottom: 2.5rem;
+  left: 50%;
+
+  color: transparent;
+
+  font-size: clamp(9rem, 21vw, 23rem);
+  font-weight: 600;
+  line-height: 0.75;
+  letter-spacing: -0.08em;
+
+  -webkit-text-stroke:
+    1px rgba(255, 255, 255, 0.05);
+
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ==============================
+Contact Hero
+============================== */
+
+.contact-hero {
+  position: relative;
+  isolation: isolate;
+
+  padding: 12rem 0 11rem;
+}
+
+.contact-eyebrow {
+  margin: 0 0 3rem;
+
+  color: #777;
+
+  font-size: 0.7rem;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.contact-hero h1 {
+  max-width: 1100px;
+  margin: 0;
+
+  font-size: clamp(4rem, 9vw, 9rem);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+/* 日语标题字号 */
+html:lang(ja) .contact-hero h1 {
+  font-size: clamp(3rem, 8vw, 8rem);
+}
+
+/* 日语和中文标题行距 */
+html:lang(ja) .contact-hero h1,
+html:lang(zh) .contact-hero h1 {
+  line-height: 1.1;
+}
+
+.contact-hero h1 span {
+  color: #777;
+}
+
+.contact-introduction {
+  max-width: 430px;
+  margin: 4rem 0 0 auto;
+
+  color: #888;
+
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* ==============================
+Contact Content
+============================== */
+
+.contact-content {
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 0.7fr)
+    minmax(500px, 1.3fr);
+  gap: clamp(5rem, 11vw, 12rem);
+
+  padding: 7rem 0 12rem;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ==============================
+Contact Details
+============================== */
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.contact-detail-label {
+  color: #666;
+
+  font-size: 0.65rem;
+  line-height: 1;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.contact-detail a,
+.contact-detail p {
+  margin: 0;
+
+  color: #d4d4d4;
+
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.contact-detail a {
+  position: relative;
+
+  width: fit-content;
+
+  transition: color 0.3s ease;
+}
+
+.contact-detail a::after {
+  content: "";
+
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+
+  height: 1px;
+
+  background: #fff;
+
+  transform: scaleX(0);
+  transform-origin: right;
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-detail a:hover {
+  color: #fff;
+}
+
+.contact-detail a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ==============================
+Availability
+============================== */
+
+.contact-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  margin-top: 1rem;
+
+  color: #888;
+
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.contact-status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #6dff8b;
+  box-shadow:
+    0 0 14px rgba(109, 255, 139, 0.8);
+}
+
+/* ==============================
+Form Heading
+============================== */
+
+.contact-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  margin-bottom: 3rem;
+}
+
+.contact-form-heading p {
+  margin: 0;
+
+  color: #aaa;
+
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ==============================
+Form
+============================== */
+
+.contact-form {
+  width: 100%;
+}
+
+.contact-field {
+  position: relative;
+
+  width: 100%;
+  padding: 2rem 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+  transition: border-color 0.35s ease;
+}
+
+.contact-field:last-of-type {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.contact-field:focus-within {
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.contact-field label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  margin-bottom: 1.2rem;
+
+  color: #bbb;
+
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.07em;
+}
+
+.contact-field label span {
+  color: #555;
+
+  font-size: 0.65rem;
+}
+
+.contact-field input:not([type="hidden"]),
+.contact-field textarea {
+  display: block;
+
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #fff;
+
+  font-family: inherit;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+
+
+/* Chrome / Edge 自动填充样式 */
+.contact-field input:-webkit-autofill,
+.contact-field input:-webkit-autofill:hover,
+.contact-field input:-webkit-autofill:focus,
+.contact-field input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+
+  -webkit-box-shadow:
+    0 0 0 1000px #0b0b0b inset !important;
+
+  box-shadow:
+    0 0 0 1000px #0b0b0b inset !important;
+
+  transition:
+    background-color 9999s ease-out 0s;
+}
+
+
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: #2a2a2a;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  opacity: 1;
+}
+
+.contact-field textarea {
+  min-height: 150px;
+
+  resize: vertical;
+}
+
+/* ==============================
+Custom Select
+============================== */
+
+.custom-select {
+  position: relative;
+  z-index: 20;
+
+  width: 100%;
+}
+
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  width: 100%;
+  margin: 0;
+  padding: 0 0.25rem 0 0;
+
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #777;
+
+  font-family: inherit;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease;
+}
+
+.custom-select:not(.has-value) .custom-select-value {
+  color: #2a2a2a;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+}
+
+.custom-select-trigger:hover,
+.custom-select-trigger:focus-visible,
+.custom-select.is-open .custom-select-trigger,
+.custom-select.has-value .custom-select-trigger {
+  color: #fff;
+}
+
+.custom-select-value {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select-arrow {
+  flex: 0 0 auto;
+
+  width: 8px;
+  height: 8px;
+  margin-right: 2px;
+
+  border-right: 1px solid #777;
+  border-bottom: 1px solid #777;
+
+  transform: translateY(-2px) rotate(45deg);
+
+  transition:
+    border-color 0.3s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.custom-select-trigger:hover .custom-select-arrow,
+.custom-select-trigger:focus-visible .custom-select-arrow,
+.custom-select.is-open .custom-select-arrow {
+  border-color: #ddd;
+}
+
+.custom-select.is-open .custom-select-arrow {
+  transform: translateY(3px) rotate(225deg);
+}
+
+/* 展开的选项面板 */
+.custom-select-options {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 1rem);
+  right: 0;
+  left: 0;
+
+  max-height: 320px;
+  padding: 0.55rem;
+
+  overflow-y: auto;
+
+  border: 1px solid rgba(220, 235, 245, 0.13);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25, 28, 31, 0.98),
+      rgba(14, 16, 18, 0.99)
+    );
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(175, 215, 235, 0.025);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateY(-8px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.35s;
+}
+
+.custom-select.is-open .custom-select-options {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transform: translateY(0);
+
+  transition-delay: 0s;
+}
+
+/* 单个选项 */
+.custom-select-option {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 48px;
+  padding: 0.85rem 2.8rem 0.85rem 1.5rem;
+
+  overflow: hidden;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #aaa;
+
+  font-family: inherit;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    padding-left 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 左侧短线 */
+.custom-select-option::before {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  left: 0.65rem;
+
+  width: 8px;
+  height: 1px;
+
+  background: rgba(220, 240, 250, 0.85);
+
+  opacity: 0;
+
+  transform:
+    translateY(-50%)
+    scaleX(0);
+
+  transform-origin: left;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 选中状态右侧圆点 */
+.custom-select-option::after {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  right: 1.2rem;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #dceef7;
+  box-shadow:
+    0 0 8px rgba(190, 225, 245, 0.55);
+
+  opacity: 0;
+
+  transform:
+    translateY(-50%)
+    scale(0.5);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s ease;
+}
+
+.custom-select-option:hover,
+.custom-select-option:focus-visible {
+  padding-left: 1.75rem;
+
+  background: rgba(205, 230, 245, 0.055);
+  color: #f2f6f8;
+}
+
+.custom-select-option:hover::before,
+.custom-select-option:focus-visible::before {
+  opacity: 1;
+
+  transform:
+    translateY(-50%)
+    scaleX(1);
+}
+
+.custom-select-option[aria-selected="true"] {
+  color: #fff;
+}
+
+.custom-select-option[aria-selected="true"]::after {
+  opacity: 1;
+
+  transform:
+    translateY(-50%)
+    scale(1);
+}
+
+/* 下拉菜单滚动条 */
+.custom-select-options {
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(255, 255, 255, 0.18)
+    transparent;
+}
+
+.custom-select-options::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-select-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ==============================
+Submit Area
+============================== */
+
+.contact-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+
+  padding-top: 3.5rem;
+}
+
+.contact-submit-row > p {
+  margin: 0;
+
+  color: #666;
+
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.contact-submit {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+
+  min-width: 240px;
+  padding: 1.2rem 1.4rem;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 100px;
+
+  background: transparent;
+  color: #fff;
+
+  font-size: 0.8rem;
+  line-height: 1;
+  letter-spacing: 0.07em;
+
+  cursor: pointer;
+
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.contact-submit::before {
+  content: "";
+
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background: #fff;
+
+  transform: translateX(-102%);
+
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-submit span {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-submit-arrow {
+  font-size: 1.1rem;
+
+  transition: transform 0.4s ease;
+}
+
+.contact-submit:hover {
+  border-color: #fff;
+  color: #111;
+}
+
+.contact-submit:hover::before {
+  transform: translateX(0);
+}
+
+.contact-submit:hover .contact-submit-arrow {
+  transform: translate(3px, -3px);
+}
+
+
+/* ==============================
+Form Status
+============================== */
+
+.contact-form-status {
+  min-height: 1.5rem;
+  margin: 1.5rem 0 0;
+
+  color: #777;
+
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.contact-form-status[data-state="success"] {
+  color: #6dff8b;
+}
+
+.contact-form-status[data-state="error"] {
+  color: #ff8585;
+}
+
+/* 有错误的整行字段 */
+.contact-field.has-error {
+  border-color: rgba(255, 133, 133, 0.72);
+}
+
+/* 原生输入框错误状态 */
+.contact-field input[aria-invalid="true"],
+.contact-field textarea[aria-invalid="true"] {
+  color: #ff8585;
+}
+
+.contact-field input[aria-invalid="true"]::placeholder,
+.contact-field textarea[aria-invalid="true"]::placeholder {
+  color: rgba(255, 133, 133, 0.72);
+}
+
+/* 自定义咨询类型错误状态 */
+.custom-select-trigger[aria-invalid="true"],
+.custom-select-trigger[aria-invalid="true"]
+  .custom-select-value {
+  color: #ff8585;
+}
+
+.custom-select-trigger[aria-invalid="true"]
+  .custom-select-arrow {
+  border-color: #ff8585;
+}
+
+.contact-submit:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.contact-submit:disabled:hover {
+  border-color:
+    rgba(255, 255, 255, 0.35);
+
+  color: #fff;
+}
+
+.contact-submit:disabled:hover::before {
+  transform: translateX(-102%);
+}
+
+.contact-submit:disabled:hover
+.contact-submit-arrow {
+  transform: none;
+}
+
+
+
+/* ==============================
+Tablet
+============================== */
+
+@media (max-width: 900px) {
+  .contact-hero {
+    padding-top: 11rem;
+    padding-bottom: 8rem;
+  }
+
+  .contact-introduction {
+    margin-top: 3rem;
+    margin-left: 0;
+  }
+
+  .contact-content {
+    grid-template-columns:
+      minmax(180px, 0.6fr)
+      minmax(0, 1.4fr);
+    gap: 4rem;
+
+    padding-top: 5rem;
+    padding-bottom: 9rem;
+  }
+}
+
+/* ==============================
+Mobile
+============================== */
+
+@media (max-width: 700px) {
+  .contact-page {
+    width: min(100% - 32px, 1400px);
+  }
+
+  .contact-background-text {
+    bottom: 2rem;
+  }
+
+  .contact-hero {
+    padding-top: 9rem;
+    padding-bottom: 7rem;
+  }
+
+  .contact-eyebrow {
+    margin-bottom: 2rem;
+  }
+
+  .contact-hero h1 {
+    font-size: clamp(3.5rem, 17vw, 6rem);
+  }
+
+  .contact-introduction {
+    margin-top: 2.5rem;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 7rem;
+
+    padding-top: 4rem;
+    padding-bottom: 8rem;
+  }
+
+  .contact-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 2rem;
+  }
+
+  .contact-status {
+    grid-column: 1 / -1;
+  }
+
+  .contact-submit-row {
+    align-items: flex-end;
+  }
+
+  .custom-select-options {
+    top: calc(100% + 0.8rem);
+  }
+
+  .custom-select-option {
+    min-height: 46px;
+  }
+}
+
+/* ==============================
+Small Mobile
+============================== */
+
+@media (max-width: 480px) {
+  .contact-details {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-status {
+    grid-column: auto;
+  }
+
+  .contact-submit-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-submit {
+    width: 100%;
+  }
+}
+
+/* ==============================
+Reduced Motion
+============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-submit,
+  .contact-submit::before,
+  .contact-submit-arrow,
+  .contact-detail a::after,
+  .custom-select-trigger,
+  .custom-select-arrow,
+  .custom-select-options,
+  .custom-select-option,
+  .custom-select-option::before,
+  .custom-select-option::after {
+    transition: none;
+  }
+}

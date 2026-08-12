@@ -1,0 +1,390 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/nav.astro";
+import Footer from "../components/footer.astro";
+import BackToTop from "../components/back-to-top.astro";
+
+import "../styles/about.css";
+
+import { getTranslations } from "../i18n/index.js";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+const about = t.about;
+
+const contactUrl = getRelativeLocaleUrl(
+  currentLocale,
+  "contact"
+);
+
+const approachSpace = currentLocale === "zh" ? "" : " ";
+---
+
+<BaseLayout
+  title={t.seo.about.title}
+  description={t.seo.about.description}
+>
+  <Nav current="about" />
+
+  <main class="about-page">
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="about-hero-top">
+        <p class="about-eyebrow">
+          {about.hero.label}
+        </p>
+      
+        <p class="about-hero-index">
+          {about.hero.number}
+        </p>
+      </div>
+    
+      <h1>
+        {about.hero.titleLine1}<br />
+      
+        {about.hero.titleLine2}{" "}
+        <span>{about.hero.titleAccent}</span>
+      </h1>
+    
+      <div class="about-hero-bottom">
+        <p class="about-hero-role">
+          {about.hero.roles.join(" / ")}
+        </p>
+      
+        <p class="about-hero-description">
+          {
+            about.hero.description.map(
+              (line: string, index: number) => (
+                <>
+                  {index > 0 && <br />}
+                  {line}
+                </>
+              )
+            )
+          }
+        </p>
+      </div>
+    
+      <div class="about-background-text" aria-hidden="true">
+        {about.hero.backgroundText}
+      </div>
+    </section>
+
+    <!-- Profile -->
+    <section class="about-profile">
+      <div class="about-section-heading">
+        <span>{about.profile.sectionNumber}</span>
+        <p>{about.profile.sectionTitle}</p>
+      </div>
+    
+      <div class="about-profile-grid">
+        <div class="about-visual">
+          <div
+            class="about-visual-grid"
+            aria-hidden="true"
+          ></div>
+        
+          <div
+            class="about-visual-circle"
+            aria-hidden="true"
+          >
+            <span>Y</span>
+            <span>Y</span>
+          </div>
+        
+          <div class="about-visual-caption">
+            <span>{about.profile.visualLeft}</span>
+            <span>{about.profile.visualRight}</span>
+          </div>
+        </div>
+      
+        <div class="about-biography">
+          <p class="about-biography-lead">
+            <span>{about.profile.leadLine1}</span>
+            <span>{about.profile.leadLine2}</span>
+          </p>
+        
+          <div class="about-biography-text">
+            {
+              about.profile.biography.map((paragraph: string) => (
+                <p>{paragraph}</p>
+              ))
+            }
+          </div>
+        
+          <dl class="about-information">
+            <div>
+              <dt>
+                {about.profile.information.locationLabel}
+              </dt>
+            
+              <dd>
+                {about.profile.information.location}
+              </dd>
+            </div>
+          
+            <div>
+              <dt>
+                {about.profile.information.focusLabel}
+              </dt>
+            
+              <dd>
+                {about.profile.information.focus.join(" / ")}
+              </dd>
+            </div>
+          
+            <div>
+              <dt>
+                {about.profile.information.languagesLabel}
+              </dt>
+            
+              <dd class="about-language-summary">
+                {
+                  about.profile.information.languages.map(
+                    (language: { name: string; level: string }) => (
+                      <span>
+                        <strong>{language.name}</strong>
+                        <small>{language.level}</small>
+                      </span>
+                    )
+                  )
+                }
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="about-experience">
+      <div class="about-section-heading">
+        <span>{about.experience.sectionNumber}</span>
+        <p>{about.experience.sectionTitle}</p>
+      </div>
+    
+      <div class="about-timeline">
+        {
+          about.experience.items.map(
+            (
+              item: {
+                dateStart: string;
+                dateEnd: string;
+                company: string;
+                position: string;
+                description: string;
+              }
+            ) => (
+              <article class="about-timeline-item">
+                <div class="about-timeline-date">
+                  <span>{item.dateStart}</span>
+                  <span>{item.dateEnd}</span>
+                </div>
+              
+                <div
+                  class="about-timeline-marker"
+                  aria-hidden="true"
+                >
+                  <span></span>
+                </div>
+              
+                <div class="about-timeline-content">
+                  <p class="about-timeline-company">
+                    {item.company}
+                  </p>
+                
+                  <h2>{item.position}</h2>
+                
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            )
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Education & Qualifications -->
+    <section class="about-background">
+      <div class="about-section-heading">
+        <span>{about.background.sectionNumber}</span>
+      
+        <p>
+          {about.background.educationTitle}
+          {" & "}
+          {about.background.qualificationTitle}
+        </p>
+      </div>
+    
+      <div class="about-background-grid">
+        <!-- Education -->
+        <div class="about-background-column">
+          <h2>{about.background.educationTitle}</h2>
+        
+          <div class="about-background-list">
+            {
+              about.background.education.map(
+                (
+                  item: {
+                    dateStart: string;
+                    dateEnd: string;
+                    school: string;
+                    detail: string;
+                  }
+                ) => (
+                  <article class="about-background-item">
+                    <span>
+                      {item.dateStart} — {item.dateEnd}
+                    </span>
+                  
+                    <div>
+                      <h3>{item.school}</h3>
+                      <p>{item.detail}</p>
+                    </div>
+                  </article>
+                )
+              )
+            }
+          </div>
+        </div>
+      
+        <!-- Qualifications -->
+        <div class="about-background-column">
+          <h2>{about.background.qualificationTitle}</h2>
+        
+          <div class="about-background-list">
+            {
+              about.background.qualifications.map(
+                (
+                  item: {
+                    date: string;
+                    name: string;
+                    detail: string;
+                  }
+                ) => (
+                  <article class="about-background-item">
+                    <span>{item.date}</span>
+                  
+                    <div>
+                      <h3>{item.name}</h3>
+                      <p>{item.detail}</p>
+                    </div>
+                  </article>
+                )
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="about-capabilities">
+      <div class="about-section-heading">
+        <span>{about.capabilities.sectionNumber}</span>
+        <p>{about.capabilities.sectionTitle}</p>
+      </div>
+    
+      <div class="about-capability-list">
+        {
+          about.capabilities.items.map(
+            (
+              item: {
+                title: string;
+                description: string;
+              }
+            ) => (
+              <article class="about-capability">
+                <h2>{item.title}</h2>
+              
+                <p>{item.description}</p>
+              
+                <span
+                  class="about-capability-arrow"
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
+              </article>
+            )
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="about-tools">
+      <div class="about-section-heading">
+        <span>{about.tools.sectionNumber}</span>
+        <p>{about.tools.sectionTitle}</p>
+      </div>
+    
+      <div class="about-tools-grid">
+        {
+          about.tools.groups.map(
+            (
+              group: {
+                category: string;
+                items: string[];
+              }
+            ) => (
+              <div class="about-tool-group">
+                <span class="about-tool-label">
+                  {group.category}
+                </span>
+              
+                <ul>
+                  {
+                    group.items.map((tool: string) => (
+                      <li>{tool}</li>
+                    ))
+                  }
+                </ul>
+              </div>
+            )
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="about-philosophy">
+      <div class="about-section-heading">
+        <span>{about.approach.sectionNumber}</span>
+        <p>{about.approach.sectionTitle}</p>
+      </div>
+    
+      <div class="about-philosophy-content">
+        <p>
+          {about.approach.textBefore}
+          {approachSpace}
+        
+          <span>
+            {about.approach.highlight1}
+          </span>
+        
+          {approachSpace}
+          {about.approach.textMiddle}
+          {approachSpace}
+        
+          <span>
+            {about.approach.highlight2}
+          </span>
+        </p>
+      
+        <a
+          href={contactUrl}
+          class="about-contact-link"
+        >
+          <span>{about.approach.contactLink}</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <BackToTop />
+  </main>
+  <Footer label="About / Portfolio" />
+
+</BaseLayout>

@@ -1,0 +1,768 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/nav.astro";
+import BackToTop from "../components/back-to-top.astro";
+
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/rendering.css";
+
+
+/* ==============================
+   Types
+============================== */
+
+type InteractiveProject = {
+  scene: string;
+  title: string;
+  tools: string;
+};
+
+
+type StillProjectTranslation = {
+  title: string;
+  tools: string;
+  description: string;
+};
+
+
+type StillProjectDefinition = {
+  id: string;
+  width: number;
+  height: number;
+  images: string[];
+  viewUrl?: string;
+};
+
+
+type StillProject = {
+  id: string;
+  width: number;
+  height: number;
+  images: string[];
+  viewUrl?: string;
+
+  title: string;
+  tools: string;
+  description: string;
+};
+
+
+/* ==============================
+   Language
+============================== */
+
+const currentLocale =
+  Astro.currentLocale ?? "ja";
+
+const t =
+  getTranslations(currentLocale);
+
+const rendering =
+  t.rendering;
+
+
+
+/* ==============================
+   Base URL
+============================== */
+
+/*
+ * 使用BASE_URL兼容以后部署到
+ * GitHub Pages子目录的情况。
+ */
+const baseUrl =
+  import.meta.env.BASE_URL;
+
+const normalizedBaseUrl =
+  baseUrl.endsWith("/")
+    ? baseUrl
+    : `${baseUrl}/`;
+
+
+/* ==============================
+   Model URL
+============================== */
+
+/*
+ * 模型实际位于：
+ *
+ * public/models/LTJJ2_model.glb
+ */
+const ltjj2ModelUrl =
+  `${normalizedBaseUrl}models/LTJJ2_model.glb`;
+
+
+/* ==============================
+   Still Image URL
+============================== */
+
+const stillImageUrl = (
+  projectId: string,
+  imageNumber?: number
+) => {
+  const suffix =
+    imageNumber
+      ? `_${imageNumber}`
+      : "";
+
+  return `${normalizedBaseUrl}img/rendering/rendering_${projectId}${suffix}.jpg`;
+};
+
+
+
+/* ==============================
+   Still Project Definitions
+============================== */
+
+/*
+ * 这里管理图片路径和首图原始尺寸。
+ *
+ * images数组中的第一张图片
+ * 同时作为页面外部显示的首图。
+ *
+ * 如果某套作品有多张图片，
+ * 继续在images中添加即可。
+ */
+const stillProjectDefinitions:
+  StillProjectDefinition[] = [
+    {
+      id: "01",
+      width: 3000,
+      height: 1875,
+
+      viewUrl:
+        "https://vr.justeasy.cn/view/9123b89d280e4cd6-1753083063.html",
+
+      images: [
+        stillImageUrl("01"),
+        stillImageUrl("01", 2),
+        stillImageUrl("01", 3),
+      ],
+    },
+
+    {
+      id: "02",
+      width: 2499,
+      height: 3000,
+
+      images: [
+        stillImageUrl("02"),
+        stillImageUrl("02", 2),
+      ],
+    },
+
+    {
+      id: "03",
+      width: 3000,
+      height: 2350,
+
+      images: [
+        stillImageUrl("03"),
+        stillImageUrl("03", 2),
+      ],
+    },
+
+    {
+      id: "05",
+      width: 3000,
+      height: 3750,
+
+      images: [
+        stillImageUrl("05"),
+        stillImageUrl("05", 2),
+        stillImageUrl("05", 3),
+        stillImageUrl("05", 4),
+      ],
+    },
+
+    {
+      id: "06",
+      width: 3000,
+      height: 1688,
+
+      images: [
+        stillImageUrl("06"),
+      ],
+    },
+
+    {
+      id: "07",
+      width: 1500,
+      height: 1360,
+
+      images: [
+        stillImageUrl("07"),
+        stillImageUrl("07", 2),
+        stillImageUrl("07", 3),
+        stillImageUrl("07", 4),
+      ],
+    },
+  ];
+
+
+/* ==============================
+   Still Project Translations
+============================== */
+
+/*
+ * 后面可以在三个语言文件的
+ * rendering.stillProjects中添加
+ * 每套作品的真实文字。
+ *
+ * 目前没有文字时会使用备用名称，
+ * 因此页面不会报错。
+ */
+const translatedStillProjects =
+  (
+    (
+      rendering as typeof rendering & {
+        stillProjects?:
+          StillProjectTranslation[];
+      }
+    ).stillProjects ?? []
+  );
+
+
+/* ==============================
+   Final Still Project Data
+============================== */
+
+const stillProjects:
+  StillProject[] =
+    stillProjectDefinitions.map(
+      (
+        project,
+        index
+      ) => {
+        const translation =
+          translatedStillProjects[
+            index
+          ];
+
+        return {
+          ...project,
+
+          title:
+            translation?.title ??
+            `${rendering.stillViewer.fallbackTitle} ${project.id}`,
+
+          tools:
+            translation?.tools ??
+            "3ds Max / V-Ray",
+
+          description:
+            translation?.description ??
+            "",
+        };
+      }
+    );
+
+
+/* ==============================
+   Display Order
+============================== */
+
+/*
+ * 实际页面排版顺序：
+ *
+ * 第一行：01 / 02
+ * 第二行：05 / 03
+ * 第三行：06 / 07
+ *
+ * 03和05交换位置，
+ * 避免左侧全部是横图。
+ */
+const stillDisplayOrder = [
+  "01",
+  "02",
+  "05",
+  "03",
+  "06",
+  "07",
+];
+
+
+const displayedStillProjects =
+  stillDisplayOrder
+    .map(
+      (projectId) =>
+        stillProjects.find(
+          (project) =>
+            project.id === projectId
+        )
+    )
+    .filter(
+      (
+        project
+      ): project is StillProject =>
+        Boolean(project)
+    );
+---
+
+<BaseLayout
+  title={t.seo.rendering.title}
+  description={t.seo.rendering.description}
+>
+  <Nav current="rendering" />
+
+
+  <main
+    class="rendering-page"
+    aria-labelledby="rendering-title"
+  >
+    <!-- 页面主标题保留语义，但视觉隐藏 -->
+
+    <h1
+      id="rendering-title"
+      class="visually-hidden"
+    >
+      {rendering.title}
+    </h1>
+
+
+    <!-- ==========================
+         Interactive 3D
+    =========================== -->
+
+    <section
+      class="rendering-interactive"
+      aria-labelledby="interactive-title"
+    >
+      <header
+        class="rendering-section-heading"
+      >
+        <h2 id="interactive-title">
+          {rendering.interactiveSectionTitle}
+        </h2>
+      </header>
+
+
+      <div
+        class="rendering-interactive-list"
+      >
+        {
+          rendering.projects.map(
+            (
+              project:
+                InteractiveProject,
+              index: number
+            ) => (
+              <article class="project">
+                <div
+                  class="viewer"
+                  data-scene={
+                    project.scene
+                  }
+                  data-model={
+                    index === 0
+                      ? ltjj2ModelUrl
+                      : undefined
+                  }
+                >
+                  <canvas
+                    class="viewer-canvas"
+                  ></canvas>
+
+
+                  <!-- ======================
+                       Loading
+                  ======================= -->
+
+                  <div
+                    class="viewer-loading"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <div
+                      class="
+                        viewer-loading-information
+                      "
+                    >
+                      <p>
+                        <span
+                          class="
+                            viewer-loading-dot
+                          "
+                          aria-hidden="true"
+                        ></span>
+
+                        <span>
+                          {
+                            rendering
+                              .preparingLabel
+                          }
+                        </span>
+                      </p>
+
+
+                      <!--
+                        由rendering.js
+                        实时更新。
+                      -->
+
+                      <span
+                        class="
+                          viewer-loading-percentage
+                        "
+                        data-loading-percentage
+                      >
+                        0%
+                      </span>
+                    </div>
+
+
+                    <div
+                      class="
+                        viewer-loading-progress
+                      "
+                      role="progressbar"
+                      aria-label={
+                        rendering
+                          .preparingLabel
+                      }
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      aria-valuenow="0"
+                      data-loading-progress
+                    >
+                      <span></span>
+                    </div>
+                  </div>
+
+
+                  <!-- ======================
+                       Fullscreen
+                  ======================= -->
+                  <button
+                    class="fullscreen-btn"
+                    type="button"
+                    aria-label={
+                      rendering
+                        .fullscreenLabel
+                    }
+                  >
+                    ⛶
+                  </button>
+
+
+                  <!-- ======================
+                       Reset View
+                  ======================= -->
+                  <button
+                    class="reset-view-btn"
+                    type="button"
+                    aria-label={
+                      rendering.resetLabel
+                    }
+                  >
+                    <span
+                      aria-hidden="true"
+                    >
+                      ↺
+                    </span>
+                  </button>
+
+
+                  <!-- ======================
+                       Background Color
+                  ======================= -->
+                  <button
+                    class="background-toggle-btn"
+                    type="button"
+                    aria-label={
+                      rendering.backgroundLabel
+                    }
+                    aria-pressed="false"
+                  >
+                    <span aria-hidden="true">
+                      ◐
+                    </span>
+                  </button>
+                </div>
+
+
+                <!-- ======================
+                     Project Information
+                ======================= -->
+
+                <div class="project-info">
+                  <h3>
+                    {project.title}
+                  </h3>
+
+                  <p>
+                    {project.tools}
+                  </p>
+                </div>
+              </article>
+            )
+          )
+        }
+      </div>
+    </section>
+
+
+    <!-- ==========================
+         Rendered Stills
+    =========================== -->
+
+    <section
+      class="rendering-stills"
+      aria-labelledby="stills-title"
+    >
+      <header
+        class="rendering-section-heading"
+      >
+        <h2 id="stills-title">
+          {rendering.stillsSectionTitle}
+        </h2>
+      </header>
+
+
+      <div class="stills-grid">
+        {
+          displayedStillProjects.map(
+            (
+              project,
+              index
+            ) => (
+              <article
+                class:list={[
+                  "still-project",
+                  `still-project-${project.id}`,
+                ]}
+                data-still-index={index}
+                data-still-id={project.id}
+                data-still-title={
+                  project.title
+                }
+                data-still-tools={
+                  project.tools
+                }
+                data-still-description={
+                  project.description
+                }
+                data-still-view-url={
+                  project.viewUrl ?? ""
+                }
+                data-still-images={
+                  JSON.stringify(
+                    project.images
+                  )
+                }
+              >
+                <!--
+                  按钮覆盖首图，
+                  点击后由JS打开查看器。
+                -->
+
+                <button
+                  class="still-project-open"
+                  type="button"
+                  data-open-still
+                  aria-label={`${rendering.stillViewer.open}: ${project.title}`}
+                >
+                  <span
+                    class="
+                      still-project-image
+                    "
+                  >
+                    <img
+                      src={
+                        project.images[0]
+                      }
+                      alt={project.title}
+                      width={project.width}
+                      height={project.height}
+                      loading="lazy"
+                    />
+
+                    <span
+                      class="
+                        still-project-overlay
+                      "
+                      aria-hidden="true"
+                    >
+                      <span>
+                        {rendering.stillViewer.open}
+                      </span>
+                    </span>
+                  </span>
+                </button>
+
+
+                <div
+                  class="
+                    still-project-information
+                  "
+                >
+                  <h3>
+                    {project.title}
+                  </h3>
+
+                  <p>
+                    {project.tools}
+                  </p>
+                </div>
+              </article>
+            )
+          )
+        }
+      </div>
+    </section>
+
+
+    <BackToTop />
+  </main>
+
+
+  <!-- ==========================
+       Still Image Viewer
+  =========================== -->
+
+  <div
+    class="still-viewer"
+    data-still-viewer
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="still-viewer-title"
+    aria-hidden="true"
+    hidden
+  >
+    <!-- 点击背景关闭查看器 -->
+
+    <button
+      class="still-viewer-backdrop"
+      type="button"
+      data-still-close
+      aria-label={rendering.stillViewer.close}
+    ></button>
+
+
+    <div class="still-viewer-panel">
+      <!-- 关闭按钮 -->
+
+      <button
+        class="still-viewer-close"
+        type="button"
+        data-still-close
+        aria-label={rendering.stillViewer.close}
+      >
+        <span aria-hidden="true">
+          ×
+        </span>
+      </button>
+
+
+      <!-- 图片区域 -->
+
+      <div class="still-viewer-media">
+        <img
+          class="still-viewer-image"
+          data-still-viewer-image
+          src=""
+          alt=""
+        />
+
+
+        <!-- 上一张 -->
+
+        <button
+          class="
+            still-viewer-navigation
+            still-viewer-previous
+          "
+          type="button"
+          data-still-previous
+          aria-label={rendering.stillViewer.previous}
+        >
+          <span aria-hidden="true">
+            ←
+          </span>
+        </button>
+
+
+        <!-- 下一张 -->
+
+        <button
+          class="
+            still-viewer-navigation
+            still-viewer-next
+          "
+          type="button"
+          data-still-next
+          aria-label={rendering.stillViewer.next}
+        >
+          <span aria-hidden="true">
+            →
+          </span>
+        </button>
+      </div>
+
+
+      <!-- 项目信息 -->
+
+      <aside
+        class="
+          still-viewer-information
+        "
+      >
+        <div
+          class="
+            still-viewer-counter
+          "
+        >
+          <span
+            data-still-current
+          >
+            01
+          </span>
+
+          <span aria-hidden="true">
+            /
+          </span>
+
+          <span
+            data-still-total
+          >
+            01
+          </span>
+        </div>
+
+
+        <h2
+          id="still-viewer-title"
+          data-still-viewer-title
+        ></h2>
+
+
+        <p
+          class="still-viewer-tools"
+          data-still-viewer-tools
+        ></p>
+
+
+        <p
+          class="still-viewer-description"
+          data-still-viewer-description
+        ></p>
+        
+        <a
+          class="still-viewer-link"
+          data-still-viewer-link
+          target="_blank"
+          rel="noopener noreferrer"
+          hidden
+        >
+          {rendering.stillViewer.view360}
+        </a>
+      </aside>
+    </div>
+  </div>
+
+
+  <script>
+    import "../scripts/rendering.js";
+  </script>
+</BaseLayout>

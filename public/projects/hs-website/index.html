@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content="H&S Concept 企业景观设计网站展示"
+    />
+
+    <title>H&S Concept</title>
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <script src="./script.js" defer></script>
+  </head>
+
+  <body>
+    <main class="hs-home" data-home>
+      <!-- ==========================
+           背景图片
+      =========================== -->
+
+      <div
+        class="home-slideshow"
+        aria-hidden="true"
+      >
+        <div
+          class="home-slide is-active"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(0, 0, 0, 0.12),
+                rgba(0, 0, 0, 0.2)
+              ),
+              url('./home01.jpg');
+          "
+        ></div>
+
+        <div
+          class="home-slide"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(0, 0, 0, 0.12),
+                rgba(0, 0, 0, 0.2)
+              ),
+              url('./home02.jpg');
+          "
+        ></div>
+
+        <div
+          class="home-slide"
+          style="
+            background-image:
+              linear-gradient(
+                rgba(0, 0, 0, 0.12),
+                rgba(0, 0, 0, 0.2)
+              ),
+              url('./home03.jpg');
+          "
+        ></div>
+      </div>
+
+      <!-- ==========================
+           Logo 与菜单
+      =========================== -->
+
+      <div
+        class="brand-navigation"
+        data-brand-navigation
+      >
+        <button
+          class="brand-button"
+          type="button"
+          data-menu-toggle
+          aria-label="打开菜单"
+          aria-expanded="false"
+        >
+          <span
+            class="brand-logo"
+            aria-hidden="true"
+          ></span>
+        </button>
+
+        <nav
+          class="home-navigation"
+          data-navigation
+          aria-label="主导航"
+        >
+          <a href="./about.html">
+            <span class="navigation-cn">
+              关于我们
+            </span>
+
+            <span class="navigation-en">
+              ABOUT
+            </span>
+          </a>
+
+          <a href="./about.html">
+            <span class="navigation-cn">
+              项目
+            </span>
+
+            <span class="navigation-en">
+              PROJECTS
+            </span>
+          </a>
+
+          <a href="./about.html">
+            <span class="navigation-cn">
+              新闻
+            </span>
+
+            <span class="navigation-en">
+              NEWS
+            </span>
+          </a>
+
+          <a href="./about.html">
+            <span class="navigation-cn">
+              联系我们
+            </span>
+
+            <span class="navigation-en">
+              CONTACT
+            </span>
+          </a>
+
+          <a href="./about.html">
+            <span class="navigation-cn">
+              泛美
+            </span>
+
+            <span class="navigation-en">
+              FANMEI
+            </span>
+          </a>
+        </nav>
+      </div>
+
+      <p class="visually-hidden">
+        点击画面可以切换下一张图片。
+      </p>
+    </main>
+  </body>
+</html>

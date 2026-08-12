@@ -1,0 +1,381 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/nav.astro";
+import BackToTop from "../components/back-to-top.astro";
+
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/graphic.css";
+
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+const graphic = t.graphic;
+
+
+/* ==============================
+   Viewer Labels
+============================== */
+
+const viewerLabels = {
+  ja: {
+    open: "作品を拡大表示",
+    close: "閉じる",
+    previous: "前の作品",
+    next: "次の作品",
+    date: "制作日",
+    duration: "制作時間",
+    tools: "使用ツール",
+  },
+
+  en: {
+    open: "View project",
+    close: "Close",
+    previous: "Previous project",
+    next: "Next project",
+    date: "Date",
+    duration: "Production Time",
+    tools: "Tools",
+  },
+
+  zh: {
+    open: "查看作品",
+    close: "关闭",
+    previous: "上一个作品",
+    next: "下一个作品",
+    date: "制作日期",
+    duration: "制作时间",
+    tools: "使用软件",
+  },
+};
+
+const labels =
+  viewerLabels[
+    currentLocale as keyof typeof viewerLabels
+  ] ?? viewerLabels.ja;
+
+
+/* ==============================
+   Project Data
+============================== */
+
+const baseUrl =
+  import.meta.env.BASE_URL;
+
+const normalizedBaseUrl =
+  baseUrl.endsWith("/")
+    ? baseUrl
+    : `${baseUrl}/`;
+
+/*
+ * 文件按照从旧到新的顺序保存：
+ * Graphics_01.jpg → 最早的作品
+ * Graphics_24.jpg → 最新的作品
+ */
+const sourceWorks = Array.from(
+  { length: 24 },
+  (_, index) => {
+    const fileNumber = String(
+      index + 1
+    ).padStart(2, "0");
+
+    /*
+     * 三个语言文件中的 projects
+     * 也按照从旧到新的顺序排列。
+     */
+    const project = graphic.projects?.[index];
+
+    return {
+      title: project?.title,
+      category:
+        project?.category ??
+        "Graphic Design",
+
+      date:
+        project?.date ??
+        "2026",
+
+      duration:
+        project?.duration ??
+        "—",
+
+      tools:
+        project?.tools ??
+        "Illustrator / Photoshop",
+
+      description:
+        project?.description ??
+        graphic.workDescription,
+
+      /*
+       * 图片文件编号始终固定，
+       * 不受网站显示顺序影响。
+       */
+      image:
+        `${normalizedBaseUrl}img/graphic/Graphics_${fileNumber}.jpg`,
+    };
+  }
+);
+
+/*
+ * 网站中反向显示，让最新作品排在最前面。
+ * 同时重新生成网页上的显示编号。
+ */
+const works = sourceWorks
+  .reverse()
+  .map((work, index) => {
+    const displayNumber = String(
+      index + 1
+    ).padStart(2, "0");
+
+    return {
+      ...work,
+
+      number: displayNumber,
+
+      title:
+        work.title ??
+        `${graphic.workTitle} ${displayNumber}`,
+    };
+  });
+---
+
+<BaseLayout
+  title={t.seo.graphic.title}
+  description={t.seo.graphic.description}
+>
+  <Nav current="graphic" />
+
+  <main
+    class="graphic-page"
+    aria-labelledby="graphic-title"
+  >
+    <!-- 保留页面语义，但视觉上隐藏 -->
+    <h1
+      id="graphic-title"
+      class="visually-hidden"
+    >
+      {graphic.title}
+    </h1>
+
+    <!-- ==========================
+         作品列表
+    =========================== -->
+
+    <section class="graphic-archive">
+      {
+        works.map(
+          (
+            work: {
+              number: string;
+              title: string;
+              category: string;
+              date: string;
+              duration: string;
+              tools: string;
+              description: string;
+              image: string;
+            },
+            index: number
+          ) => (
+            <article
+              class="work"
+              data-work-index={index}
+              data-work-number={work.number}
+              data-work-title={work.title}
+              data-work-category={work.category}
+              data-work-date={work.date}
+              data-work-duration={work.duration}
+              data-work-tools={work.tools}
+              data-work-description={work.description}
+              data-work-image={work.image}
+            >
+              <div class="work-image">
+                <img
+                  src={work.image}
+                  alt={work.title}
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="work-info">
+                <h2>{work.title}</h2>
+
+                <!--
+                  缩略图区域只显示分类，
+                  完整介绍在查看器中显示。
+                -->
+                <p>{work.category}</p>
+              </div>
+
+              <!-- 覆盖整张作品卡片的按钮 -->
+              <button
+                class="work-open"
+                type="button"
+                aria-label={`${labels.open}: ${work.title}`}
+                data-open-work
+              >
+                <span class="visually-hidden">
+                  {labels.open}: {work.title}
+                </span>
+              </button>
+            </article>
+          )
+        )
+      }
+    </section>
+
+    <BackToTop />
+  </main>
+
+
+  <!-- ==========================
+       作品查看器
+  =========================== -->
+
+  <div
+    class="graphic-viewer"
+    data-graphic-viewer
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="graphic-viewer-title"
+    aria-hidden="true"
+    hidden
+  >
+    <!-- 点击背景关闭查看器 -->
+    <button
+      class="graphic-viewer-backdrop"
+      type="button"
+      data-viewer-close
+      aria-label={labels.close}
+    ></button>
+
+    <div class="graphic-viewer-panel">
+      <!-- 关闭按钮 -->
+      <button
+        class="graphic-viewer-close"
+        type="button"
+        data-viewer-close
+        aria-label={labels.close}
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <!-- ========================
+           左侧图片
+      ========================= -->
+
+      <div
+        class="graphic-viewer-media"
+        data-viewer-media
+      >
+        <img
+          class="graphic-viewer-image"
+          data-viewer-image
+          src=""
+          alt=""
+        />
+
+        <!-- 上一个作品 -->
+        <button
+          class="
+            graphic-viewer-navigation
+            graphic-viewer-previous
+          "
+          type="button"
+          data-viewer-previous
+          aria-label={labels.previous}
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+
+        <!-- 下一个作品 -->
+        <button
+          class="
+            graphic-viewer-navigation
+            graphic-viewer-next
+          "
+          type="button"
+          data-viewer-next
+          aria-label={labels.next}
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+
+      <!-- ========================
+           右侧详细信息
+      ========================= -->
+
+      <aside class="graphic-viewer-information">
+        <div class="graphic-viewer-counter">
+          <span data-viewer-number>
+            01
+          </span>
+
+          <span aria-hidden="true">
+            /
+          </span>
+
+          <span>
+            {String(works.length).padStart(2, "0")}
+          </span>
+        </div>
+
+        <div class="graphic-viewer-heading">
+          <p data-viewer-category>
+            Graphic Design
+          </p>
+
+          <h2
+            id="graphic-viewer-title"
+            data-viewer-title
+          >
+            Project
+          </h2>
+        </div>
+
+        <p
+          class="graphic-viewer-description"
+          data-viewer-description
+        ></p>
+
+        <dl class="graphic-viewer-details">
+          <!-- 制作日期 -->
+          <div>
+            <dt>{labels.date}</dt>
+
+            <dd data-viewer-date></dd>
+          </div>
+
+          <!-- 制作时间 -->
+          <div>
+            <dt>{labels.duration}</dt>
+
+            <dd data-viewer-duration></dd>
+          </div>
+
+          <!-- 使用软件 -->
+          <div>
+            <dt>{labels.tools}</dt>
+
+            <dd data-viewer-tools></dd>
+          </div>
+        </dl>
+
+        <div
+          class="graphic-viewer-mobile-navigation"
+          aria-hidden="true"
+        >
+          <span>←</span>
+          <span>Swipe</span>
+          <span>→</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    import "../scripts/graphic.js";
+  </script>
+</BaseLayout>

@@ -1,0 +1,116 @@
+/* ======================
+   Back To Top
+====================== */
+
+.back-to-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  margin-top:
+    clamp(6rem, 10vw, 10rem);
+}
+
+
+/* ======================
+   Button
+====================== */
+
+.back-to-top-button {
+  position: relative;
+
+  display: inline-block;
+
+  padding: 1rem 0 0;
+
+  border: 0;
+
+  background: transparent;
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 0.68rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: color 0.3s ease;
+}
+
+
+/* 文字上方的短线 */
+
+.back-to-top-button::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  width: 70%;
+  height: 1px;
+
+  background:
+    rgba(255, 255, 255, 0.22);
+
+  transform: translateX(-50%);
+
+  transition: background 0.3s ease;
+}
+
+
+/* ======================
+   Hover
+====================== */
+
+.back-to-top-button:hover {
+  color: #fff;
+}
+
+.back-to-top-button:hover::before {
+  background: #fff;
+}
+
+.back-to-top-button:focus-visible {
+  color: #fff;
+
+  outline:
+    1px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 6px;
+}
+
+.back-to-top-button:focus-visible::before {
+  background: #fff;
+}
+
+
+/* ======================
+   Mobile
+====================== */
+
+@media (max-width: 700px) {
+  .back-to-top {
+    margin-top: 6rem;
+  }
+
+  .back-to-top-button {
+    padding-top: 0.85rem;
+
+    font-size: 0.64rem;
+  }
+}
+
+
+/* ======================
+   Reduced Motion
+====================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top-button,
+  .back-to-top-button::before {
+    transition: none;
+  }
+}

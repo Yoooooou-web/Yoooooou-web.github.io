@@ -1,0 +1,62 @@
+---
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/back-to-top.css";
+
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+---
+
+<div class="back-to-top">
+  <button
+    class="back-to-top-button"
+    type="button"
+    data-back-to-top
+    aria-label={t.common.backToTop}
+  >
+    <span class="back-to-top-label">
+      {t.common.backToTop}
+    </span>
+  </button>
+</div>
+
+<script>
+  function initializeBackToTop() {
+    const buttons = document.querySelectorAll(
+      "[data-back-to-top]"
+    );
+
+    buttons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      if (button.dataset.initialized === "true") {
+        return;
+      }
+
+      button.dataset.initialized = "true";
+
+      button.addEventListener("click", () => {
+        const reducedMotion =
+          window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+
+        window.scrollTo({
+          top: 0,
+          behavior: reducedMotion
+            ? "auto"
+            : "smooth",
+        });
+      });
+    });
+  }
+
+  initializeBackToTop();
+
+  document.addEventListener(
+    "astro:page-load",
+    initializeBackToTop
+  );
+</script>

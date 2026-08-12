@@ -1,0 +1,20 @@
+---
+import AboutPage from "../about.astro";
+
+export function getStaticPaths() {
+  return [
+    {
+      params: {
+        lang: "en",
+      },
+    },
+    {
+      params: {
+        lang: "zh",
+      },
+    },
+  ];
+}
+---
+
+<AboutPage />

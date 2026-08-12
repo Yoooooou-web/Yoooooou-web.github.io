@@ -1,0 +1,321 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/nav.astro";
+import Footer from "../components/footer.astro";
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/contact.css";
+
+/* 获取当前页面语言 */
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+---
+
+<BaseLayout
+  title={t.seo.contact.title}
+  description={t.seo.contact.description}
+>
+  <Nav current="contact" />
+
+  <main class="contact-page">
+    <!-- 页面顶部 -->
+    <section class="contact-hero">
+      <p class="contact-eyebrow">
+        {t.contact.hero.eyebrow}
+      </p>
+
+      <h1>
+        {t.contact.hero.line1}<br />
+        {t.contact.hero.line2}
+        <span>{t.contact.hero.accent}</span>
+      </h1>
+
+      <p class="contact-introduction">
+        {t.contact.hero.introduction}
+      </p>
+
+      <div
+        class="contact-background-text"
+        aria-hidden="true"
+      >
+        {t.contact.hero.backgroundText}
+      </div>
+    </section>
+
+    <!-- 联系区域 -->
+    <section class="contact-content">
+      <!-- 左侧信息 -->
+      <aside class="contact-details">
+        <div class="contact-detail">
+          <span class="contact-detail-label">
+            {t.contact.details.email}
+          </span>
+
+          <a href="mailto:you215915078@gmail.com">
+            you215915078@gmail.com
+          </a>
+        </div>
+
+        <div class="contact-detail">
+          <span class="contact-detail-label">
+            {t.contact.details.locationLabel}
+          </span>
+
+          <p>{t.contact.details.location}</p>
+        </div>
+
+        <div class="contact-detail">
+          <span class="contact-detail-label">
+            {t.contact.details.availableFor}
+          </span>
+
+          <p>
+            {
+              t.contact.details.services.map(
+                (service: string, index: number) => (
+                  <>
+                    {service}
+
+                    {
+                      index <
+                        t.contact.details.services.length - 1 && (
+                        <br />
+                      )
+                    }
+                  </>
+                )
+              )
+            }
+          </p>
+        </div>
+
+        <div class="contact-status">
+          <span
+            class="contact-status-dot"
+            aria-hidden="true"
+          ></span>
+
+          <span>{t.contact.details.status}</span>
+        </div>
+      </aside>
+
+      <!-- 右侧表单 -->
+      <div class="contact-form-area">
+        <div class="contact-form-heading">
+          <p>{t.contact.form.heading}</p>
+        </div>
+
+        
+        <form
+          class="contact-form"
+          action="https://formspree.io/f/xnpadkgb"
+          method="POST"
+          data-contact-form
+          data-message-sending={
+            t.contact.form.messages.sending
+          }
+          data-message-success={
+            t.contact.form.messages.success
+          }
+          data-message-error={
+            t.contact.form.messages.error
+          }
+          data-message-subject-required={
+            t.contact.form.messages.subjectRequired
+          }
+        >
+          <input
+            type="hidden"
+            name="language"
+            value={currentLocale}
+          />
+          <div class="contact-field">
+            <label for="contact-name">
+              <span>01</span>
+              {t.contact.form.name.label}
+            </label>
+
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              placeholder={t.contact.form.name.placeholder}
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-email">
+              <span>02</span>
+              {t.contact.form.email.label}
+            </label>
+
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              placeholder={t.contact.form.email.placeholder}
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-subject-trigger">
+              <span>03</span>
+              {t.contact.form.subject.label}
+            </label>
+
+            <div class="custom-select">
+              <!--
+                实际提交给表单的值。
+                用户选择自定义选项后，JavaScript 会更新这里。
+              -->
+              <input
+                id="contact-subject"
+                name="subject"
+                type="hidden"
+                value=""
+              />
+
+              <button
+                id="contact-subject-trigger"
+                class="custom-select-trigger"
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="contact-subject-options"
+              >
+                <span
+                  class="custom-select-value"
+                  data-placeholder={
+                    t.contact.form.subject.placeholder
+                  }
+                >
+                  {t.contact.form.subject.placeholder}
+                </span>
+
+                <span
+                  class="custom-select-arrow"
+                  aria-hidden="true"
+                ></span>
+              </button>
+
+              <div
+                id="contact-subject-options"
+                class="custom-select-options"
+                role="listbox"
+                aria-hidden="true"
+                aria-labelledby="contact-subject-trigger"
+              >
+                <button
+                  class="custom-select-option"
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-value="web-design"
+                >
+                  {t.contact.form.subject.options.webDesign}
+                </button>
+
+                <button
+                  class="custom-select-option"
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-value="graphic-design"
+                >
+                  {t.contact.form.subject.options.graphicDesign}
+                </button>
+
+                <button
+                  class="custom-select-option"
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-value="3dcg"
+                >
+                  {t.contact.form.subject.options.threeDCG}
+                </button>
+
+                <button
+                  class="custom-select-option"
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-value="recruitment"
+                >
+                  {t.contact.form.subject.options.recruitment}
+                </button>
+
+                <button
+                  class="custom-select-option"
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-value="other"
+                >
+                  {t.contact.form.subject.options.other}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-message">
+              <span>04</span>
+              {t.contact.form.message.label}
+            </label>
+
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="5"
+              placeholder={t.contact.form.message.placeholder}
+              required
+            ></textarea>
+          </div>
+
+          <div class="contact-submit-row">
+            <p>{t.contact.form.responseTime}</p>
+
+            <button
+              class="contact-submit"
+              type="submit"
+            >
+              <span data-contact-submit-label>
+                {t.contact.form.submit}
+              </span>
+            
+              <span
+                class="contact-submit-arrow"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
+            </button>
+          </div>
+
+          <p
+            class="contact-form-status"
+            data-contact-form-status
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <Footer label={t.contact.footerLabel} />
+
+  <script>
+    import "../scripts/contact.ts";
+  </script>
+</BaseLayout>

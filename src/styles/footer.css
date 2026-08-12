@@ -1,0 +1,73 @@
+/* ==============================
+   Site Footer
+============================== */
+
+.site-footer {
+  width: 100%;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.1);
+}
+
+.site-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: min(1400px, 90%);
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.site-footer-inner p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+
+  margin: 0;
+
+  color: #555;
+
+  font-size: 0.7rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.site-footer-inner span {
+  display: inline-flex;
+  align-items: center;
+}
+
+
+/* 自动添加中间的分隔点 */
+
+.site-footer-inner span:not(:last-child)::after {
+  content: "·";
+
+  margin: 0 1rem;
+
+  color: #333;
+}
+
+
+/* ==============================
+   Mobile
+============================== */
+
+@media (max-width: 480px) {
+  .site-footer-inner {
+    width: min(100% - 32px, 1400px);
+    padding: 1.5rem 0;
+  }
+
+  .site-footer-inner p {
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+  }
+
+  .site-footer-inner span:not(:last-child)::after {
+    margin: 0 0.6rem;
+  }
+}

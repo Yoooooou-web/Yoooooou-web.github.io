@@ -1,0 +1,117 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Portfolio — Yoooooou",
+  description =
+    "Portfolio of Yoooooou, featuring Web Design, Graphic Design and 3DCG projects.",
+} = Astro.props;
+
+const htmlLang = Astro.currentLocale ?? "ja";
+
+const openGraphLocale = {
+  ja: "ja_JP",
+  en: "en_US",
+  zh: "zh_CN",
+}[htmlLang] ?? "ja_JP";
+---
+
+<!DOCTYPE html>
+
+<html lang={htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <ClientRouter />
+
+    <!-- 页面标题 -->
+    <title>{title}</title>
+
+    <!-- 搜索结果中的页面说明 -->
+    <meta
+      name="description"
+      content={description}
+    />
+
+    <!-- 浏览器界面主题颜色 -->
+    <meta
+      name="theme-color"
+      content="#0b0b0b"
+    />
+
+    <!-- 社交平台分享信息 -->
+    <meta
+      property="og:type"
+      content="website"
+    />
+
+    <meta
+      property="og:site_name"
+      content="Yoooooou Portfolio"
+    />
+
+    <meta
+      property="og:title"
+      content={title}
+    />
+
+    <meta
+      property="og:description"
+      content={description}
+    />
+
+    <meta
+      property="og:locale"
+      content={openGraphLocale}
+    />
+
+    <!-- X / Twitter -->
+    <meta
+      name="twitter:card"
+      content="summary"
+    />
+
+    <meta
+      name="twitter:title"
+      content={title}
+    />
+
+    <meta
+      name="twitter:description"
+      content={description}
+    />
+
+    <!-- 页面需要追加的 head 内容 -->
+    <slot name="head" />
+
+    <!-- 网站图标 -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/img/favicon-light.svg"
+      media="(prefers-color-scheme: light)"
+    />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/img/favicon-dark.svg"
+      media="(prefers-color-scheme: dark)"
+    />
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

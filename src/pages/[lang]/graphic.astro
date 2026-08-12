@@ -1,0 +1,12 @@
+---
+import GraphicPage from "../graphic.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "zh" } },
+  ];
+}
+---
+
+<GraphicPage />

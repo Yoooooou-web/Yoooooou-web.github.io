@@ -1,0 +1,279 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import LanguageSwitch from "./language-switch.astro";
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/nav.css";
+
+const { current = "" } = Astro.props;
+
+/* 自动获取当前页面语言 */
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+
+/* 生成当前语言对应的页面地址 */
+const localeUrl = (path = "") =>
+  getRelativeLocaleUrl(currentLocale, path);
+
+/* 当前页面路径，用于语言切换 */
+const localizedPages = [
+  "about",
+  "rendering",
+  "graphic",
+  "web",
+  "contact",
+];
+
+const currentPage = localizedPages.includes(current)
+  ? current
+  : "";
+---
+
+<header class="nav" data-site-nav>
+  <div class="nav-inner">
+    <!-- Logo -->
+    <div class="logo">
+      <a href={localeUrl("")}>YOOOOOOU</a>
+    </div>
+
+    <!-- 移动端菜单按钮 -->
+    <button
+      class="nav-menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-navigation"
+      aria-label={t.nav.openMenuLabel}
+      data-menu-text={t.nav.menuButton}
+      data-close-text={t.nav.closeButton}
+      data-open-label={t.nav.openMenuLabel}
+      data-close-label={t.nav.closeMenuLabel}
+    >
+      <span class="nav-menu-toggle-text">
+        {t.nav.menuButton}
+      </span>
+    </button>
+
+    <!-- 桌面导航 / 移动端全屏菜单 -->
+    <div
+      class="nav-actions"
+      id="site-navigation"
+    >
+      <nav
+        class="nav-links"
+        aria-label="Main navigation"
+      >
+        <a
+          class:list={[
+            "nav-item",
+            { active: current === "about" },
+          ]}
+          href={localeUrl("about")}
+        >
+          <span class="nav-item-label">
+            {t.nav.about}
+          </span>
+        </a>
+
+        <a
+          class:list={[
+            "nav-item",
+            { active: current === "rendering" },
+          ]}
+          href={localeUrl("rendering")}
+        >
+          <span class="nav-item-label">
+            {t.nav.rendering}
+          </span>
+        </a>
+
+        <a
+          class:list={[
+            "nav-item",
+            { active: current === "graphic" },
+          ]}
+          href={localeUrl("graphic")}
+        >
+          <span class="nav-item-label">
+            {t.nav.graphic}
+          </span>
+        </a>
+
+        <a
+          class:list={[
+            "nav-item",
+            { active: current === "web" },
+          ]}
+          href={localeUrl("web")}
+        >
+          <span class="nav-item-label">
+            {t.nav.web}
+          </span>
+        </a>
+
+        <a
+          class:list={[
+            "nav-item",
+            { active: current === "contact" },
+          ]}
+          href={localeUrl("contact")}
+        >
+          <span class="nav-item-label">
+            {t.nav.contact}
+          </span>
+        </a>
+      </nav>
+
+      <LanguageSwitch page={currentPage} />
+    </div>
+  </div>
+</header>
+
+<script>
+  let navigationController:
+    AbortController | null = null;
+
+  function initializeNavigation() {
+    /*
+      ClientRouter 切换页面后，
+      先移除上一个导航的事件监听。
+    */
+    navigationController?.abort();
+
+    navigationController = new AbortController();
+
+    const { signal } = navigationController;
+
+    const nav =
+      document.querySelector<HTMLElement>(
+        "[data-site-nav]"
+      );
+
+    if (!nav) return;
+
+    const button =
+      nav.querySelector<HTMLButtonElement>(
+        ".nav-menu-toggle"
+      );
+
+    const panel =
+      nav.querySelector<HTMLElement>(
+        ".nav-actions"
+      );
+
+    const buttonText =
+      button?.querySelector<HTMLElement>(
+        ".nav-menu-toggle-text"
+      );
+
+    if (!button || !panel || !buttonText) return;
+
+    /*
+      统一处理菜单的打开与关闭状态。
+    */
+    const setMenuOpen = (open: boolean) => {
+      nav.classList.toggle("menu-open", open);
+
+      button.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+
+      button.setAttribute(
+        "aria-label",
+        open
+          ? button.dataset.closeLabel ?? "Close menu"
+          : button.dataset.openLabel ?? "Open menu"
+      );
+
+      buttonText.textContent = open
+        ? button.dataset.closeText ?? "CLOSE"
+        : button.dataset.menuText ?? "MENU";
+
+      /*
+        打开菜单时禁止背景页面滚动。
+      */
+      document.documentElement.classList.toggle(
+        "nav-menu-open",
+        open
+      );
+    };
+
+    /* 每次进入新页面时先关闭菜单 */
+    setMenuOpen(false);
+
+    /* 点击 MENU / CLOSE */
+    button.addEventListener(
+      "click",
+      () => {
+        const isOpen =
+          button.getAttribute("aria-expanded") ===
+          "true";
+
+        setMenuOpen(!isOpen);
+      },
+      { signal }
+    );
+
+    /*
+      点击菜单中的页面链接或语言链接后，
+      自动关闭菜单。
+    */
+    panel.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+
+        if (
+          target instanceof Element &&
+          target.closest("a")
+        ) {
+          setMenuOpen(false);
+        }
+      },
+      { signal }
+    );
+
+    /* 按 Esc 关闭菜单 */
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key !== "Escape") return;
+
+        const isOpen =
+          button.getAttribute("aria-expanded") ===
+          "true";
+
+        if (!isOpen) return;
+
+        setMenuOpen(false);
+        button.focus();
+      },
+      { signal }
+    );
+
+    /*
+      从移动端放大到桌面端时，
+      自动清除移动菜单状态。
+    */
+    window.addEventListener(
+      "resize",
+      () => {
+        if (window.innerWidth > 850) {
+          setMenuOpen(false);
+        }
+      },
+      { signal }
+    );
+  }
+
+  /*
+    首次打开页面时执行，
+    ClientRouter 切换页面后也重新执行。
+  */
+  document.addEventListener(
+    "astro:page-load",
+    initializeNavigation
+  );
+
+  initializeNavigation();
+</script>

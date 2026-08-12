@@ -1,0 +1,250 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    
+    background: #242424
+        radial-gradient(
+            circle at center,
+            #242424 0%,
+            #181818 50%,
+            #0b0b0b 100%
+        );
+
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+/* Three.js */
+#canvas-container {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+
+/* 上层文字 */
+.overlay {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(36px, 5vh, 56px);
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.overlay h1 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.overlay h2 {
+  margin: 0 0 26px;
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+
+
+/* ENTER */
+.enter-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 130px;
+  height: 32px;
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 0.7rem;
+  line-height: 1;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.enter-text {
+  position: relative;
+  z-index: 1;
+
+  letter-spacing: 0.18em;
+
+  transition:
+    color 0.4s ease,
+    letter-spacing 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 0.4s ease;
+}
+
+/* 四个直角的共同样式 */
+.enter-corner {
+  position: absolute;
+
+  width: 5px;
+  height: 5px;
+
+  border-color: rgba(255, 255, 255, 0.36);
+  border-style: solid;
+  border-width: 0;
+
+  transition:
+    width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    inset 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    filter 0.35s ease;
+}
+
+/* 左上角 */
+.corner-top-left {
+  top: 0;
+  left: 0;
+
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+/* 右上角 */
+.corner-top-right {
+  top: 0;
+  right: 0;
+
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+/* 左下角 */
+.corner-bottom-left {
+  bottom: 0;
+  left: 0;
+
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+/* 右下角 */
+.corner-bottom-right {
+  right: 0;
+  bottom: 0;
+
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+}
+
+/* 鼠标移入和键盘聚焦 */
+.enter-link:hover .enter-text,
+.enter-link:focus-visible .enter-text {
+  color: #fff;
+  letter-spacing: 0.25em;
+
+  text-shadow:
+    0 0 12px rgba(210, 240, 255, 0.28);
+}
+
+.enter-link:hover .enter-corner,
+.enter-link:focus-visible .enter-corner {
+  width: 6px;
+  height: 6px;
+
+  border-color: rgba(230, 246, 255, 0.95);
+
+  filter:
+    drop-shadow(0 0 4px rgba(190, 230, 255, 0.35));
+}
+
+/* 四角向内移动 */
+.enter-link:hover .corner-top-left,
+.enter-link:focus-visible .corner-top-left {
+  top: 4px;
+  left: 4px;
+}
+
+.enter-link:hover .corner-top-right,
+.enter-link:focus-visible .corner-top-right {
+  top: 4px;
+  right: 4px;
+}
+
+.enter-link:hover .corner-bottom-left,
+.enter-link:focus-visible .corner-bottom-left {
+  bottom: 4px;
+  left: 4px;
+}
+
+.enter-link:hover .corner-bottom-right,
+.enter-link:focus-visible .corner-bottom-right {
+  right: 4px;
+  bottom: 4px;
+}
+
+/* 键盘操作时的焦点提示 */
+.enter-link:focus-visible {
+  outline: 1px solid rgba(220, 240, 255, 0.5);
+  outline-offset: 5px;
+}
+
+
+
+
+
+
+
+
+/* 轻微暗角 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,255,255,0.06) 0%,
+            rgba(0,255,255,0.02) 25%,
+            transparent 50%
+        );
+
+    z-index: 1;
+}
+
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(.2, .8, .2, 1);
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-text,
+  .enter-corner {
+    transition: none;
+  }
+}

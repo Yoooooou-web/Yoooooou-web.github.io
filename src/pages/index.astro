@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getTranslations } from "../i18n/index.js";
+
+import "../styles/home.css";
+
+const currentLocale = Astro.currentLocale ?? "ja";
+const t = getTranslations(currentLocale);
+
+const aboutUrl = getRelativeLocaleUrl(
+  currentLocale,
+  "about"
+);
+---
+
+<BaseLayout
+  title={t.seo.home.title}
+  description={t.seo.home.description}
+>
+  <main class="splash-page">
+    <div id="canvas-container"></div>
+
+    <div class="overlay">
+      <h1>{t.home.heading}</h1>
+      <h2>{t.home.subheading}</h2>
+
+      <a
+        class="enter-link"
+        href={aboutUrl}
+      >
+        <span class="enter-corner corner-top-left" aria-hidden="true"></span>
+        <span class="enter-corner corner-top-right" aria-hidden="true"></span>
+        <span class="enter-corner corner-bottom-left" aria-hidden="true"></span>
+        <span class="enter-corner corner-bottom-right" aria-hidden="true"></span>
+
+        <span class="enter-text">{t.home.enter}</span>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    import "../scripts/home.js";
+  </script>
+</BaseLayout>

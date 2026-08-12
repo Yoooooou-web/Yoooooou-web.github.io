@@ -1,0 +1,160 @@
+/* ======================
+   Global Variables
+====================== */
+
+:root {
+  /* 固定导航高度 */
+  --nav-height: 56px;
+
+  /* 作品页面顶部空间 */
+  --portfolio-page-top:
+    clamp(96px, 8vw, 128px);
+
+  /* 移动端作品页面顶部空间 */
+  --portfolio-page-top-mobile: 80px;
+
+  /* 页面宽度 */
+  --page-width: min(1400px, 90%);
+  --page-width-mobile:
+    min(100% - 32px, 1400px);
+
+  /* 作品页面底部空间 */
+  --portfolio-page-bottom: 6rem;
+  --portfolio-page-bottom-mobile: 4rem;
+
+
+  /* ======================
+     Font Families
+  ====================== */
+
+  /*
+   * 三种语言共用的英文和数字字体。
+   * 保证相同英文在不同语言页面中保持一致。
+   */
+  --font-latin:
+    Arial;
+
+  /*
+   * 日语页面：
+   * 英文优先使用统一的西文字体，
+   * 日文字符再回退到日文字体。
+   */
+  --font-japanese:
+    var(--font-latin),
+    "Noto Sans JP",
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    "YuGothic",
+    Meiryo,
+    sans-serif;
+
+  /* 英语页面 */
+  --font-english:
+    var(--font-latin),
+    sans-serif;
+
+  /*
+   * 中文页面：
+   * 英文优先使用统一的西文字体，
+   * 中文字符再回退到中文字体。
+   */
+  --font-chinese:
+    var(--font-latin),
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Microsoft JhengHei",
+    sans-serif;
+
+  /* 默认使用日语页面字体 */
+  --font-body: var(--font-japanese);
+}
+
+
+/* ======================
+   Language Fonts
+====================== */
+
+html:lang(ja) {
+  --font-body: var(--font-japanese);
+}
+
+html:lang(en) {
+  --font-body: var(--font-english);
+}
+
+html:lang(zh) {
+  --font-body: var(--font-chinese);
+}
+
+
+/* ======================
+   Global Reset
+====================== */
+
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  font-family: var(--font-body);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #0b0b0b;
+  color: #fff;
+
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img {
+  display: block;
+}
+
+
+/* ======================
+   Accessibility
+====================== */
+
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+
+  border: 0;
+}

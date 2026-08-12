@@ -1,0 +1,106 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const {
+  page = ""
+} = Astro.props;
+
+/* 获取当前页面语言 */
+const currentLocale = Astro.currentLocale ?? "ja";
+
+/* 三种语言的显示名称 */
+const languages = [
+  {
+    code: "ja",
+    label: "JA",
+    htmlLang: "ja",
+  },
+  {
+    code: "en",
+    label: "EN",
+    htmlLang: "en",
+  },
+  {
+    code: "zh",
+    label: "中文",
+    htmlLang: "zh",
+  },
+];
+---
+
+<nav
+  class="language-switch"
+  aria-label="Language selection"
+>
+  {
+    languages.map((language, index) => (
+      <>
+        {
+          index > 0 && (
+            <span
+              class="language-switch-separator"
+              aria-hidden="true"
+            >
+              /
+            </span>
+          )
+        }
+
+        <a
+          class:list={[
+            "language-switch-link",
+            {
+              active:
+                currentLocale === language.code
+            },
+          ]}
+          href={getRelativeLocaleUrl(
+            language.code,
+            page
+          )}
+          lang={language.htmlLang}
+          hreflang={language.htmlLang}
+          aria-current={
+            currentLocale === language.code
+              ? "page"
+              : undefined
+          }
+        >
+          {language.label}
+        </a>
+      </>
+    ))
+  }
+</nav>
+
+<script>
+  import type {
+    TransitionBeforePreparationEvent,
+  } from "astro:transitions/client";
+
+  let languageScrollY: number | null = null;
+
+  document.addEventListener(
+    "astro:before-preparation",
+    (event: TransitionBeforePreparationEvent) => {
+      const source = event.sourceElement;
+
+      const languageLink =
+        source instanceof Element
+          ? source.closest(".language-switch-link")
+          : null;
+
+      if (languageLink) {
+        languageScrollY = window.scrollY;
+      }
+    }
+  );
+
+  document.addEventListener("astro:after-swap", () => {
+    if (languageScrollY === null) return;
+
+    window.scrollTo(0, languageScrollY);
+
+    languageScrollY = null;
+  });
+</script>

@@ -1,0 +1,315 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/nav.astro";
+import BackToTop from "../components/back-to-top.astro";
+
+import {
+  getRelativeLocaleUrl
+} from "astro:i18n";
+
+import {
+  getTranslations
+} from "../i18n/index.js";
+
+import "../styles/web.css";
+
+
+/* ==============================
+   Types
+============================== */
+
+type WebProjectTranslation = {
+  title: string;
+  category: string;
+  description: string;
+  date: string;
+  technologies: string;
+};
+
+type WebWork = WebProjectTranslation & {
+  image: string;
+  url: string;
+};
+
+
+/* ==============================
+   Language
+============================== */
+
+const currentLocale =
+  Astro.currentLocale ?? "ja";
+
+const t =
+  getTranslations(currentLocale);
+
+
+/* ==============================
+   Project Link Labels
+============================== */
+
+/*
+ * 按钮文字直接在这里处理，
+ * 不再读取已经不存在的
+ * t.web.project。
+ */
+const projectLinkLabels = {
+  ja: {
+    text: "プロジェクトを見る",
+    aria: "プロジェクトを見る",
+  },
+
+  en: {
+    text: "View Project",
+    aria: "View project",
+  },
+
+  zh: {
+    text: "查看项目",
+    aria: "查看项目",
+  },
+};
+
+const projectLinkLabel =
+  projectLinkLabels[
+    currentLocale as keyof
+      typeof projectLinkLabels
+  ] ?? projectLinkLabels.ja;
+
+
+/* ==============================
+   Portfolio URL
+============================== */
+
+const portfolioUrl =
+  getRelativeLocaleUrl(
+    currentLocale,
+    ""
+  );
+
+
+/* ==============================
+   Static Project URL
+============================== */
+
+const baseUrl =
+  import.meta.env.BASE_URL;
+
+const normalizedBaseUrl =
+  baseUrl.endsWith("/")
+    ? baseUrl
+    : `${baseUrl}/`;
+
+const projectUrl = (
+  projectName: string
+) =>
+  `${normalizedBaseUrl}projects/${projectName}/index.html`;
+
+
+/* ==============================
+   Project Links
+============================== */
+
+/*
+ * 顺序必须和三个语言文件中的
+ * web.projects保持一致：
+ *
+ * 01 → Portfolio
+ * 02 → Tea Plus
+ * 03 → H&S
+ */
+const projectLinks: string[] = [
+  portfolioUrl,
+
+  "https://yoooooou-web.github.io/TeaPlus/",
+
+  projectUrl("hs-website"),
+];
+
+
+/* ==============================
+   Translation Project Data
+============================== */
+
+/*
+ * 明确告诉Astro语言文件中的
+ * projects是什么数据类型。
+ */
+const translatedProjects =
+  (
+    t.web.projects ?? []
+  ) as WebProjectTranslation[];
+
+
+/* ==============================
+   Final Project Data
+============================== */
+
+const works: WebWork[] =
+  translatedProjects.map(
+    (
+      project,
+      index
+    ) => {
+      const imageNumber =
+        String(index + 1)
+          .padStart(2, "0");
+
+      return {
+        ...project,
+
+        image:
+          `/img/web/web_${imageNumber}.jpg`,
+
+        /*
+         * 如果语言文件意外多出项目，
+         * 使用Portfolio地址作为备用，
+         * 避免url变成undefined。
+         */
+        url:
+          projectLinks[index] ??
+          portfolioUrl,
+      };
+    }
+  );
+---
+
+<BaseLayout
+  title={t.seo.web.title}
+  description={t.seo.web.description}
+>
+  <Nav current="web" />
+
+  <main
+    class="web-page"
+    aria-labelledby="web-title"
+  >
+    <!-- 保留页面语义，视觉上隐藏 -->
+
+    <h1
+      id="web-title"
+      class="visually-hidden"
+    >
+      {t.web.hero.title}
+    </h1>
+
+    <!-- ==========================
+         Project List
+    =========================== -->
+
+    <section class="web-projects">
+      {
+        works.map(
+          (
+            work,
+            index
+          ) => (
+            <article
+              class:list={[
+                "web-project",
+                {
+                  "web-project-reverse":
+                    index % 2 !== 0,
+                },
+              ]}
+            >
+              <!-- Project Image -->
+
+              <div class="web-project-media">
+                <div class="web-image-window">
+                  <img
+                    class="web-project-image"
+                    src={work.image}
+                    alt={work.title}
+                    loading={
+                      index === 0
+                        ? "eager"
+                        : "lazy"
+                    }
+                  />
+                </div>
+              </div>
+
+              <!-- Project Information -->
+
+              <div class="web-project-content">
+                <!-- Top Line -->
+
+                <div
+                  class="web-project-line"
+                  aria-hidden="true"
+                ></div>
+
+                <!-- Category -->
+
+                <p class="web-project-category">
+                  {work.category}
+                </p>
+
+                <!-- Title -->
+
+                <h2>
+                  {work.title}
+                </h2>
+
+                <!-- Description -->
+
+                <p
+                  class="web-project-description"
+                >
+                  {work.description}
+                </p>
+
+                <!-- Project Details -->
+                <dl class="web-project-details">
+                  <div>
+                    <dt>
+                      {t.web.projectDetails.date}
+                    </dt>
+                  
+                    <dd>
+                      {work.date}
+                    </dd>
+                  </div>
+                
+                  <div>
+                    <dt>
+                      {t.web.projectDetails.technologies}
+                    </dt>
+                  
+                    <dd>
+                      {work.technologies}
+                    </dd>
+                  </div>
+                </dl>
+
+                <!-- Project Link -->
+                <a
+                  class="web-project-link"
+                  href={work.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-astro-reload
+                  aria-label={`${projectLinkLabel.aria}: ${work.title}`}
+                >
+                  <span>
+                    {projectLinkLabel.text}
+                  </span>
+
+                  <span aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              </div>
+            </article>
+          )
+        )
+      }
+    </section>
+
+    <BackToTop />
+  </main>
+
+  <script>
+    import "../scripts/web.js";
+  </script>
+</BaseLayout>

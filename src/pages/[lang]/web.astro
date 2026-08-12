@@ -1,0 +1,12 @@
+---
+import WebPage from "../web.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "zh" } },
+  ];
+}
+---
+
+<WebPage />

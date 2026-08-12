@@ -1,0 +1,12 @@
+---
+import RenderingPage from "../rendering.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "zh" } },
+  ];
+}
+---
+
+<RenderingPage />

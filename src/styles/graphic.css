@@ -1,0 +1,864 @@
+/* ==============================
+   Graphic Page
+============================== */
+
+.graphic-page {
+  width: var(--page-width);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding:
+    var(--portfolio-page-top)
+    0
+    var(--portfolio-page-bottom);
+}
+
+
+/* ==============================
+   Masonry Archive
+============================== */
+
+.graphic-archive {
+  --graphic-column-count: 5;
+
+  display: grid;
+  grid-template-columns:
+    repeat(
+      var(--graphic-column-count),
+      minmax(0, 1fr)
+    );
+  column-gap: 30px;
+
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* ==============================
+   Masonry Column
+============================== */
+
+.graphic-column {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+
+  min-width: 0;
+}
+
+
+/* ==============================
+   Work Card
+============================== */
+
+.graphic-page .work {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+
+  opacity: 0;
+  transform: translateY(40px);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.graphic-page .work.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* 整张作品卡片的透明点击按钮 */
+
+.work-open {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: zoom-in;
+}
+
+.work-open:focus-visible {
+  outline:
+    1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 5px;
+}
+
+
+/* ==============================
+   Work Imagecategory
+============================== */
+
+.graphic-page .work-image {
+  width: 100%;
+  max-width: 100%;
+
+  overflow: hidden;
+
+  border-radius: 6px;
+  background-color: #f2f2f2;
+}
+
+.graphic-page .work-image img {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  transition:
+    transform 0.6s
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.graphic-page .work:hover .work-image img {
+  transform: scale(1.06);
+}
+
+
+/* ==============================
+   Work Information
+============================== */
+
+.graphic-page .work-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 0.35rem;
+
+  width: 100%;
+  padding: 0.9rem 0.5rem 0;
+}
+
+
+.graphic-page .work-info h2 {
+  margin: 0;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+
+.graphic-page .work-info p {
+  margin: 0;
+
+  color: #888;
+
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+
+/* ==============================
+   Viewer Page Lock
+============================== */
+
+html.graphic-viewer-open,
+html.graphic-viewer-open body {
+  overflow: hidden;
+}
+
+
+/* ==============================
+   Graphic Viewer
+============================== */
+
+.graphic-viewer {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+}
+
+.graphic-viewer[hidden] {
+  display: none;
+}
+
+.graphic-viewer.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+/* ==============================
+   Viewer Backdrop
+============================== */
+
+.graphic-viewer-backdrop {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  padding: 0;
+
+  border: 0;
+
+  background:
+    rgba(5, 5, 6, 0.94);
+
+  cursor: default;
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* ==============================
+   Viewer Panel
+============================== */
+
+.graphic-viewer-panel {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(280px, 330px);
+
+  width: min(1800px, 100%);
+  height: calc(100dvh - 24px);
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 9px;
+  
+
+  background: #0d0d0e;
+
+  opacity: 0;
+  transform:
+    translateY(20px)
+    scale(0.99);
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.graphic-viewer.is-open
+.graphic-viewer-panel {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* ==============================
+   Viewer Close Button
+============================== */
+
+.graphic-viewer-close {
+  position: absolute;
+  z-index: 10;
+  top: 18px;
+  right: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+
+  background:
+    rgba(20, 20, 20, 0.6);
+  color: #fff;
+
+  font-size: 1.4rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.graphic-viewer-close:hover {
+  background:
+    rgba(255, 255, 255, 0.18);
+
+  transform: scale(1.1);
+}
+
+.graphic-viewer-close:focus-visible {
+  outline:
+    1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 4px;
+}
+
+
+/* ==============================
+   Viewer Media
+============================== */
+
+.graphic-viewer-media {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+  height: 100%;
+  padding:
+    clamp(0.5rem, 1vw, 1rem)
+    clamp(1rem, 1.5vw, 1.5rem);
+
+  overflow: hidden;
+
+  background: #111113;
+
+  cursor: grab;
+
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.graphic-viewer-media.is-dragging {
+  cursor: grabbing;
+}
+
+.graphic-viewer-image {
+  display: block;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  opacity: 1;
+  transform:
+    translateX(0)
+    scale(1);
+
+  transition:
+    opacity 0.28s ease,
+    transform 0.38s
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.graphic-viewer-image.is-changing-left {
+  opacity: 0;
+  transform:
+    translateX(-28px)
+    scale(0.985);
+}
+
+.graphic-viewer-image.is-changing-right {
+  opacity: 0;
+  transform:
+    translateX(28px)
+    scale(0.985);
+}
+
+
+/* ==============================
+   Viewer Navigation
+============================== */
+
+.graphic-viewer-navigation {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+
+  background:
+    rgba(10, 10, 11, 0.45);
+  color: #aaa;
+
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  transform: translateY(-50%);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.graphic-viewer-previous {
+  left: 12px;
+}
+
+.graphic-viewer-next {
+  right: 12px;
+}
+
+.graphic-viewer-navigation:hover {
+  border-color:
+    rgba(255, 255, 255, 0.45);
+
+  background:
+    rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.graphic-viewer-previous:hover {
+  transform:
+    translateY(-50%)
+    translateX(-3px);
+}
+
+.graphic-viewer-next:hover {
+  transform:
+    translateY(-50%)
+    translateX(3px);
+}
+
+.graphic-viewer-navigation:focus-visible {
+  outline:
+    1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 4px;
+}
+
+
+/* ==============================
+   Viewer Information
+============================== */
+
+.graphic-viewer-information {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  height: 100%;
+  padding:
+    clamp(5rem, 8vh, 7rem)
+    clamp(1.25rem, 2vw, 2rem)
+    clamp(2rem, 5vh, 4rem);
+
+  overflow-y: auto;
+
+  border-left:
+    1px solid rgba(255, 255, 255, 0.1);
+
+  background: #0b0b0c;
+}
+
+.graphic-viewer-counter {
+  display: flex;
+  gap: 0.45rem;
+
+  margin-bottom:
+    clamp(4rem, 10vh, 7rem);
+
+  color: #666;
+
+  font-size: 0.65rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+}
+
+.graphic-viewer-counter span:first-child {
+  color: #fff;
+}
+
+
+/* ==============================
+   Viewer Heading
+============================== */
+
+.graphic-viewer-heading > p {
+  margin: 0 0 1.2rem;
+
+  color: #777;
+
+  font-size: 0.65rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.graphic-viewer-heading h2 {
+  margin: 0;
+
+  font-size:
+    clamp(1.6rem, 2vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.graphic-viewer-description {
+  margin: 2.25rem 0 0;
+
+  color: #999;
+
+  font-size: 0.85rem;
+  line-height: 1.9;
+}
+
+
+/* ==============================
+   Viewer Details
+============================== */
+
+.graphic-viewer-details {
+  margin: auto 0 0;
+  padding-top: 4rem;
+}
+
+/* 工具列表换行 */
+.graphic-viewer-details dd[data-viewer-tools] {
+  white-space: pre-line;
+  line-height: 1.8;
+}
+
+.graphic-viewer-details > div {
+  display: grid;
+  grid-template-columns:
+    minmax(80px, 0.7fr)
+    minmax(0, 1.3fr);
+  gap: 1.25rem;
+
+  padding: 1.2rem 0;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.1);
+}
+
+.graphic-viewer-details > div:last-child {
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.1);
+}
+
+.graphic-viewer-details dt {
+  color: #666;
+
+  font-size: 0.6rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.graphic-viewer-details dd {
+  margin: 0;
+
+  color: #b3b3b3;
+
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+
+/* ==============================
+   Mobile Swipe Information
+============================== */
+
+.graphic-viewer-mobile-navigation {
+  display: none;
+}
+
+
+/* ==============================
+   Four Columns
+============================== */
+
+@media (max-width: 1200px) {
+  .graphic-archive {
+    --graphic-column-count: 4;
+  }
+
+  .graphic-viewer-panel {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(270px, 310px);
+  }
+
+  .graphic-viewer-media {
+    padding: 10px 1.5rem;
+  }
+}
+
+
+/* ==============================
+   Three Columns
+============================== */
+
+@media (max-width: 900px) {
+  .graphic-archive {
+    --graphic-column-count: 3;
+  }
+
+  .graphic-viewer {
+    padding: 8px;
+  }
+
+  .graphic-viewer-panel {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(250px, 290px);
+
+    height: calc(100dvh - 16px);
+  }
+
+  .graphic-viewer-information {
+    padding:
+      5rem
+      1.5rem
+      1.5rem;
+  }
+
+  .graphic-viewer-media {
+    padding: 8px 1rem;
+  }
+}
+
+
+/* ==============================
+   Mobile Viewer
+============================== */
+
+@media (max-width: 700px) {
+  .graphic-viewer {
+    display: block;
+
+    padding: 0;
+  }
+
+  .graphic-viewer-panel {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100dvh;
+
+    border: 0;
+    border-radius: 0;
+
+    overflow-y: auto;
+  }
+
+  .graphic-viewer-close {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+
+    width: 40px;
+    height: 40px;
+  }
+
+  .graphic-viewer-media {
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: min(68vh, 680px);
+    min-height: 380px;
+    padding:
+      4rem
+      1.5rem
+      2rem;
+
+    cursor: default;
+  }
+
+  .graphic-viewer-navigation {
+    width: 42px;
+    height: 42px;
+  }
+
+  .graphic-viewer-previous {
+    left: 10px;
+  }
+
+  .graphic-viewer-next {
+    right: 10px;
+  }
+
+  .graphic-viewer-information {
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: auto;
+    min-height: 42vh;
+    padding:
+      2.5rem
+      20px
+      3rem;
+
+    overflow: visible;
+
+    border-top:
+      1px solid rgba(255, 255, 255, 0.1);
+    border-left: 0;
+  }
+
+  .graphic-viewer-counter {
+    margin-bottom: 3rem;
+  }
+
+  .graphic-viewer-heading h2 {
+    font-size:
+      clamp(1.8rem, 8vw, 2.8rem);
+  }
+
+  .graphic-viewer-description {
+    max-width: 540px;
+  }
+
+  .graphic-viewer-details {
+    width: 100%;
+    margin-top: 3rem;
+    padding-top: 0;
+  }
+
+  .graphic-viewer-mobile-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 2.5rem;
+
+    color: #666;
+
+    font-size: 0.58rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+}
+
+
+/* ==============================
+   Two Columns
+============================== */
+
+@media (max-width: 650px) {
+  .graphic-page {
+    width: var(--page-width-mobile);
+    padding:
+      var(--portfolio-page-top-mobile)
+      0
+      var(--portfolio-page-bottom-mobile);
+  }
+
+  .graphic-archive {
+    --graphic-column-count: 2;
+    column-gap: 12px;
+  }
+
+  .graphic-column {
+    gap: 24px;
+  }
+
+  .graphic-page .work-info {
+    padding-top: 0.7rem;
+  }
+
+  .graphic-page .work-info h2 {
+    font-size: 0.85rem;
+  }
+
+  .graphic-page .work-info p {
+    font-size: 0.7rem;
+  }
+}
+
+
+/* ==============================
+   Small Mobile
+============================== */
+
+@media (max-width: 420px) {
+  .graphic-viewer-media {
+    height: 62vh;
+    min-height: 340px;
+    padding:
+      3.5rem
+      1rem
+      1.5rem;
+  }
+
+  .graphic-viewer-details > div {
+    grid-template-columns:
+      90px minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+
+/* ==============================
+   Reduced Motion
+============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .graphic-page .work {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .graphic-page .work-image img,
+  .graphic-viewer,
+  .graphic-viewer-panel,
+  .graphic-viewer-image,
+  .graphic-viewer-navigation,
+  .graphic-viewer-close {
+    transition: none;
+  }
+}

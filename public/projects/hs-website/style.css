@@ -1,0 +1,541 @@
+/* ==============================
+   Reset
+============================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  overflow: hidden;
+
+  background: #07100d;
+  color: #fff;
+
+  font-family:
+    Arial,
+    "Microsoft YaHei",
+    sans-serif;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* ==============================
+   Accessibility
+============================== */
+
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+
+/* ==============================
+   Home
+============================== */
+
+.hs-home {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
+
+  background: #07100d;
+
+  cursor: pointer;
+  isolation: isolate;
+}
+
+
+/* ==============================
+   Slideshow
+============================== */
+
+.home-slideshow,
+.home-slide {
+  position: absolute;
+  inset: 0;
+}
+
+.home-slideshow {
+  z-index: -2;
+
+  overflow: hidden;
+}
+
+.home-slide {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  opacity: 0;
+
+  /*
+   * 已离开的图片保持放大状态，
+   * 避免淡出时突然缩回原尺寸。
+   */
+  transform: scale(1.075);
+
+  transition:
+    opacity 1.5s ease;
+
+  will-change:
+    opacity,
+    transform;
+}
+
+.home-slide.is-active {
+  z-index: 1;
+
+  opacity: 1;
+
+  animation:
+    home-image-zoom
+    5s
+    linear
+    forwards;
+}
+
+@keyframes home-image-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.075);
+  }
+}
+
+
+/* ==============================
+   Bottom Navigation Container
+============================== */
+
+.brand-navigation {
+  position: absolute;
+  z-index: 10;
+  bottom: clamp(30px, 5vh, 64px);
+  left: 50%;
+
+  /*
+   * 容器始终固定在页面水平中心。
+   * 关闭、展开及动画过程中，
+   * 容器本身的位置都不会变化。
+   */
+  width: min(580px, calc(100vw - 48px));
+  height: 64px;
+
+  transform: translateX(-50%);
+
+  cursor: default;
+}
+
+
+/* ==============================
+   Logo Button
+============================== */
+
+.brand-button {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  place-items: center;
+
+  width: 64px;
+  height: 64px;
+  padding: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    left 1.15s
+      cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.15s
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/*
+ * 菜单打开后，
+ * Logo 从容器中心向左移动。
+ */
+
+.brand-navigation.is-open
+  .brand-button {
+  left: 0;
+
+  transform:
+    translate(0, -50%);
+}
+
+
+/* ==============================
+   Logo
+============================== */
+
+.brand-logo {
+  display: block;
+
+  width: 52px;
+  height: 52px;
+
+  background-color: #fff;
+
+  -webkit-mask-image:
+    url("./hs_logo.svg");
+
+  mask-image:
+    url("./hs_logo.svg");
+
+  -webkit-mask-position: center;
+  mask-position: center;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  transition:
+    background-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+.brand-button:hover
+  .brand-logo,
+.brand-button:focus-visible
+  .brand-logo,
+.brand-navigation.is-open
+  .brand-logo {
+  background-color: #78be3f;
+}
+
+.brand-button:hover
+  .brand-logo {
+  transform: scale(1.06);
+}
+
+
+/* ==============================
+   Navigation Menu
+============================== */
+
+.home-navigation {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;;
+  gap: 28px;
+
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  clip-path:
+    inset(0 100% 0 0);
+
+  transform:
+    translateX(-14px);
+
+  /*
+   * 默认规则用于关闭菜单：
+   * 文字会在Logo回到中间之前快速消失。
+   */
+  transition:
+    opacity 0.25s ease,
+    visibility 0s linear 0.3s,
+    clip-path 0.4s ease,
+    transform 0.4s ease;
+}
+
+.brand-navigation.is-open
+  .home-navigation {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  clip-path:
+    inset(0 0 0 0);
+
+  transform:
+    translateX(0);
+
+  /*
+   * 打开时仍然保持缓慢展开。
+   */
+  transition:
+    opacity 0.55s ease 0.15s,
+    visibility 0s linear 0s,
+    clip-path 1.15s
+      cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.15s
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ==============================
+   Navigation Link
+============================== */
+
+.home-navigation a {
+  position: relative;
+
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-width: 72px;
+  padding: 8px 0;
+
+  color:
+    rgba(255, 255, 255, 0.75);
+
+  text-align: center;
+  white-space: nowrap;
+
+  transition:
+    color 0.3s ease;
+}
+
+.navigation-cn {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.12em;
+}
+
+.navigation-en {
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-size: 0.56rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.16em;
+
+  transition:
+    color 0.3s ease;
+}
+
+
+/* ==============================
+   Navigation Hover
+============================== */
+
+.home-navigation a::after {
+  content: "";
+
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+
+  width: 34px;
+  height: 1px;
+
+  background: #78be3f;
+
+  transform:
+    translateX(-50%)
+    scaleX(0);
+
+  transform-origin: center;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.home-navigation a:hover,
+.home-navigation a:focus-visible {
+  color: #78be3f;
+}
+
+.home-navigation a:hover
+  .navigation-en,
+.home-navigation a:focus-visible
+  .navigation-en {
+  color:
+    rgba(120, 190, 63, 0.75);
+}
+
+.home-navigation a:hover::after,
+.home-navigation a:focus-visible::after {
+  transform:
+    translateX(-50%)
+    scaleX(1);
+}
+
+
+/* ==============================
+   Keyboard Focus
+============================== */
+
+.brand-button:focus-visible,
+.home-navigation a:focus-visible {
+  outline:
+    1px solid
+    rgba(255, 255, 255, 0.9);
+
+  outline-offset: 5px;
+}
+
+
+/* ==============================
+   Tablet
+============================== */
+
+@media (max-width: 900px) {
+  .brand-navigation {
+    bottom: 28px;
+
+    width: min(
+      580px,
+      calc(100% - 40px)
+    );
+  }
+
+  .home-navigation {
+    left: 82px;
+
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .home-navigation a {
+    flex: 1 1 0;
+
+    min-width: 0;
+  }
+
+  .navigation-cn {
+    font-size: 0.88rem;
+  }
+
+  .navigation-en {
+    font-size: 0.5rem;
+  }
+}
+
+
+/* ==============================
+   Mobile
+============================== */
+
+@media (max-width: 620px) {
+  .brand-navigation {
+    bottom: 22px;
+
+    width: calc(100% - 28px);
+    height: 56px;
+  }
+
+  .brand-button {
+    width: 50px;
+    height: 56px;
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .home-navigation {
+    left: 62px;
+
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .home-navigation a {
+    flex: 1 1 0;
+
+    min-width: 0;
+  }
+
+  .navigation-cn {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .navigation-en {
+    font-size: 0.4rem;
+    letter-spacing: 0.06em;
+  }
+
+  .home-navigation a::after {
+    width: 22px;
+  }
+}
+
+
+/* ==============================
+   Reduced Motion
+============================== */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .home-slide.is-active {
+    animation: none;
+  }
+
+  .home-slide,
+  .brand-button,
+  .brand-logo,
+  .home-navigation {
+    transition: none;
+  }
+}

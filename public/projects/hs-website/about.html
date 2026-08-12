@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content="H&S Concept 景观设计项目"
+    />
+
+    <title>Projects | H&S Concept</title>
+
+    <link rel="stylesheet" href="./about.css" />
+
+    <script src="./about.js" defer></script>
+  </head>
+
+  <body>
+    <!-- ==========================
+         Header
+    =========================== -->
+
+    <header class="project-header">
+      <div class="project-header-inner">
+        <a
+          class="project-brand"
+          href="./index.html"
+          aria-label="返回首页"
+        >
+          <img
+            src="./hs_logo.svg"
+            alt="H&S Concept"
+          />
+        </a>
+
+        <nav
+          class="project-navigation"
+          aria-label="主导航"
+        >
+          <a href="./index.html">
+            <span>HOME</span>
+            <small>主页</small>
+          </a>
+
+          <a href="./about.html">
+            <span>ABOUT US</span>
+            <small>关于我们</small>
+          </a>
+
+          <a
+            class="is-active"
+            href="./about.html"
+          >
+            <span>PROJECT</span>
+            <small>项目</small>
+          </a>
+
+          <a href="./about.html">
+            <span>NEWS</span>
+            <small>新闻</small>
+          </a>
+
+          <a href="./about.html">
+            <span>CONTACT US</span>
+            <small>联系我们</small>
+          </a>
+
+          <a href="./about.html">
+            <span>FANMEI</span>
+            <small>泛美</small>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ==========================
+         Main
+    =========================== -->
+
+    <main class="project-main">
+      <h1 class="visually-hidden">
+        景观设计项目
+      </h1>
+
+      <!-- 筛选栏 -->
+
+      <section
+        class="project-filters"
+        aria-label="项目筛选"
+      >
+        <label>
+          <span class="visually-hidden">
+            选择地区
+          </span>
+
+          <select data-filter="location">
+            <option value="all">
+              全部地区
+            </option>
+
+            <option value="guangzhou">
+              广州
+            </option>
+
+            <option value="foshan">
+              佛山
+            </option>
+
+            <option value="shenzhen">
+              深圳
+            </option>
+          </select>
+        </label>
+
+        <label>
+          <span class="visually-hidden">
+            选择分类
+          </span>
+
+          <select data-filter="category">
+            <option value="all">
+              所有分类
+            </option>
+
+            <option value="residential">
+              住宅景观
+            </option>
+
+            <option value="commercial">
+              商业景观
+            </option>
+
+            <option value="public">
+              公共空间
+            </option>
+          </select>
+        </label>
+
+        <label>
+          <span class="visually-hidden">
+            选择年份
+          </span>
+
+          <select data-filter="year">
+            <option value="all">
+              选择年份
+            </option>
+
+            <option value="2023">
+              2023
+            </option>
+
+            <option value="2022">
+              2022
+            </option>
+
+            <option value="2021">
+              2021
+            </option>
+          </select>
+        </label>
+      </section>
+
+      <!-- 项目列表 -->
+
+      <section
+        class="project-grid"
+        aria-label="项目列表"
+      >
+        <article
+          class="project-card"
+          data-location="guangzhou"
+          data-category="residential"
+          data-year="2023"
+        >
+          <img
+            src="./project01.jpg"
+            alt="城市住宅景观"
+            loading="eager"
+          />
+
+          <div class="project-card-overlay">
+            <p>城市住宅景观</p>
+
+            <span>
+              Urban Residential Landscape
+            </span>
+          </div>
+        </article>
+
+        <article
+          class="project-card"
+          data-location="foshan"
+          data-category="residential"
+          data-year="2023"
+        >
+          <img
+            src="./project02.jpg"
+            alt="佛山平西合景"
+            loading="eager"
+          />
+
+          <div class="project-card-overlay">
+            <p>佛山 平西合景</p>
+
+            <span>
+              Foshan Pingxi Landscape
+            </span>
+          </div>
+        </article>
+
+        <article
+          class="project-card"
+          data-location="shenzhen"
+          data-category="commercial"
+          data-year="2022"
+        >
+          <img
+            src="./project03.jpg"
+            alt="城市展示中心"
+            loading="lazy"
+          />
+
+          <div class="project-card-overlay">
+            <p>城市展示中心</p>
+
+            <span>
+              City Exhibition Center
+            </span>
+          </div>
+        </article>
+
+        <article
+          class="project-card"
+          data-location="guangzhou"
+          data-category="public"
+          data-year="2022"
+        >
+          <img
+            src="./project04.jpg"
+            alt="现代建筑入口景观"
+            loading="lazy"
+          />
+
+          <div class="project-card-overlay">
+            <p>现代建筑入口</p>
+
+            <span>
+              Modern Entrance Landscape
+            </span>
+          </div>
+        </article>
+
+        <article
+          class="project-card"
+          data-location="foshan"
+          data-category="residential"
+          data-year="2021"
+        >
+          <img
+            src="./project05.jpg"
+            alt="住宅社区景观"
+            loading="lazy"
+          />
+
+          <div class="project-card-overlay">
+            <p>住宅社区景观</p>
+
+            <span>
+              Residential Landscape
+            </span>
+          </div>
+        </article>
+
+        <article
+          class="project-card"
+          data-location="guangzhou"
+          data-category="commercial"
+          data-year="2021"
+        >
+          <img
+            src="./project06.jpg"
+            alt="庭院夜景"
+            loading="lazy"
+          />
+
+          <div class="project-card-overlay">
+            <p>庭院夜景</p>
+
+            <span>
+              Courtyard at Night
+            </span>
+          </div>
+        </article>
+      </section>
+
+      <p
+        class="project-empty"
+        data-project-empty
+        hidden
+      >
+        暂无符合条件的项目
+      </p>
+
+      <div
+        class="project-bottom-mark"
+        aria-hidden="true"
+      >
+        <span></span>
+        <span></span>
+      </div>
+    </main>
+  </body>
+</html>
