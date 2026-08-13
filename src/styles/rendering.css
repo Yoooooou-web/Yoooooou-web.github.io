@@ -1429,7 +1429,7 @@ html.still-viewer-open body {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 490px) {
   .still-viewer-media {
     height: 62vh;
     min-height: 340px;

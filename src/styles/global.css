@@ -16,7 +16,7 @@
   /* 页面宽度 */
   --page-width: min(1400px, 90%);
   --page-width-mobile:
-    min(100% - 32px, 1400px);
+    min(100% - 40px, 1400px);
 
   /* 作品页面底部空间 */
   --portfolio-page-bottom: 6rem;

@@ -862,7 +862,7 @@ html:lang(en) .about-biography-lead {
 
 @media (max-width: 700px) {
   .about-page {
-    width: min(100% - 32px, 1400px);
+    width: var(--page-width-mobile);
   }
 
   .about-hero {
@@ -982,7 +982,7 @@ html:lang(en) .about-biography-lead {
    Small Mobile
 ============================== */
 
-@media (max-width: 480px) {
+@media (max-width: 490px) {
   .about-section-heading {
     margin-bottom: 3rem;
   }

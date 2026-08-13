@@ -824,7 +824,7 @@ html.graphic-viewer-open body {
    Small Mobile
 ============================== */
 
-@media (max-width: 420px) {
+@media (max-width: 490px) {
   .graphic-viewer-media {
     height: 62vh;
     min-height: 340px;

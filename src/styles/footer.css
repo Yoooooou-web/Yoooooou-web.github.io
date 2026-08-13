@@ -56,9 +56,9 @@
    Mobile
 ============================== */
 
-@media (max-width: 480px) {
+@media (max-width: 490px) {
   .site-footer-inner {
-    width: min(100% - 32px, 1400px);
+    width: var(--page-width-mobile);
     padding: 1.5rem 0;
   }
 
