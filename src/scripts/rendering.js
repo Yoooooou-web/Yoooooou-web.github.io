@@ -57,7 +57,7 @@ const DECAL_TEXTURE_URL =
   `${normalizedBaseUrl}img/rendering/IMG_9868.png`;
 
 const HDR_TEXTURE_URL =
-  `${normalizedBaseUrl}img/waijing.hdr`;
+  `${normalizedBaseUrl}img/waijing_2k.hdr`;
 
 
 /* ==============================

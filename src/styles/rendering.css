@@ -22,7 +22,7 @@
   align-items: center;
   gap: 16px;
 
-  margin-bottom: 48px;
+  margin-bottom: 36px;
 
   color: #888;
 }
@@ -1218,10 +1218,15 @@ html.still-viewer-open body {
   /* Three.js Viewer */
 
   .viewer {
-    height: 65vh;
-    min-height: 460px;
+    height: 55svh;
+    min-height: 360px;
+    max-height: 520px;
 
     border-radius: 18px;
+  }
+
+  .viewer-canvas {
+    touch-action: pan-y !important;
   }
 
 
