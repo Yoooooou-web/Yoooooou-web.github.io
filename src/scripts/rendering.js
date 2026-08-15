@@ -1450,6 +1450,49 @@ function createViewer(
 
   const panCorrection =
     new THREE.Vector3();
+  
+  /*
+   * 模型至少保留10%在窗口中。
+   */
+  const MIN_VISIBLE_MODEL_RATIO =
+    0.1;
+
+  /*
+   * 保存模型边界的一半尺寸。
+   */
+  const panBoundaryHalfSize =
+    new THREE.Vector3();
+
+  const panBoundaryBox =
+    new THREE.Box3();
+
+
+  /*
+   * 记录模型实际边界，
+   * 让平移限制考虑模型尺寸，
+   * 不再只根据中心点限制。
+   */
+  function setPanBoundary(object) {
+    object.updateMatrixWorld(true);
+
+    panBoundaryBox.setFromObject(
+      object
+    );
+
+    if (panBoundaryBox.isEmpty()) {
+      panBoundaryHalfSize.set(
+        0,
+        0,
+        0
+      );
+
+      return;
+    }
+
+    panBoundaryBox
+      .getSize(panBoundaryHalfSize)
+      .multiplyScalar(0.5);
+  }
 
 
   /*
@@ -1506,6 +1549,48 @@ function createViewer(
       1
     ).normalize();
 
+    /*
+     * 计算模型边界在当前画面横向和纵向
+     * 大约占据的空间。
+     */
+    const modelHalfWidth =
+      Math.abs(cameraRight.x) *
+        panBoundaryHalfSize.x +
+      Math.abs(cameraRight.y) *
+        panBoundaryHalfSize.y +
+      Math.abs(cameraRight.z) *
+        panBoundaryHalfSize.z;
+
+    const modelHalfHeight =
+      Math.abs(cameraUp.x) *
+        panBoundaryHalfSize.x +
+      Math.abs(cameraUp.y) *
+        panBoundaryHalfSize.y +
+      Math.abs(cameraUp.z) *
+        panBoundaryHalfSize.z;
+
+
+    /*
+     * 模型总宽度由两个半宽组成。
+     *
+     * 保留10%总宽度时，
+     * 模型中心最多可以越过窗口边缘
+     * 80%的模型半宽。
+     */
+    const overflowFactor =
+      1 -
+      MIN_VISIBLE_MODEL_RATIO * 2;
+
+    const horizontalLimit =
+      halfWidth +
+      modelHalfWidth *
+        overflowFactor;
+
+    const verticalLimit =
+      halfHeight +
+      modelHalfHeight *
+        overflowFactor;
+
     panOffset.subVectors(
       controls.target,
       panOrigin
@@ -1514,15 +1599,15 @@ function createViewer(
     const horizontalOffset =
       THREE.MathUtils.clamp(
         panOffset.dot(cameraRight),
-        -halfWidth,
-        halfWidth
+        -horizontalLimit,
+        horizontalLimit
       );
-
+    
     const verticalOffset =
       THREE.MathUtils.clamp(
         panOffset.dot(cameraUp),
-        -halfHeight,
-        halfHeight
+        -verticalLimit,
+        verticalLimit
       );
 
     clampedTarget
@@ -1893,6 +1978,8 @@ function createViewer(
             viewer
           );
 
+        setPanBoundary(objectGroup);
+
 
         /*
          * 相机适配模型后，
@@ -2127,6 +2214,8 @@ function createViewer(
       createPlaceholderScene(
         objectGroup
       );
+
+    setPanBoundary(objectGroup);
 
     /* 保存第二个窗口的初始视角。 */
     saveInitialView();
