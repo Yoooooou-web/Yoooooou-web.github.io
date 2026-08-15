@@ -1229,8 +1229,8 @@ function createViewer(
       ),
 
       0.08,
-      0.06,
-      1.5
+      0.02,
+      1.3
     );
 
   composer.addPass(bloomPass);
@@ -2445,23 +2445,177 @@ function createViewer(
     );
 
 
+  /*
+   * 记录是否正在使用网页内备用全屏。
+   */
+  let isPseudoFullscreen = false;
+
+
+  /*
+   * 防止快速连续点击按钮，
+   * 同时执行多个全屏请求。
+   */
+  let fullscreenTransitionPending = false;
+
+
+  /*
+   * 更新全屏按钮的辅助状态。
+   */
+  function updateFullscreenButtonState() {
+    const isFullscreen =
+      document.fullscreenElement ===
+        viewer ||
+      isPseudoFullscreen;
+
+    fullscreenButton?.setAttribute(
+      "aria-pressed",
+      String(isFullscreen)
+    );
+  }
+
+
+  /*
+   * 锁定或恢复全屏按钮。
+   */
+  function setFullscreenPending(
+    isPending
+  ) {
+    fullscreenTransitionPending =
+      isPending;
+
+    if (fullscreenButton) {
+      fullscreenButton.disabled =
+        isPending;
+    }
+  }
+
+
+  /*
+   * 进入网页内备用全屏。
+   * 主要用于iPhone。
+   */
+  function enterPseudoFullscreen() {
+    viewer.classList.add(
+      "is-pseudo-fullscreen"
+    );
+
+    document.documentElement.classList.add(
+      "viewer-pseudo-fullscreen"
+    );
+
+    isPseudoFullscreen = true;
+
+    updateFullscreenButtonState();
+  }
+
+
+  /*
+   * 退出网页内备用全屏。
+   */
+  function exitPseudoFullscreen() {
+    viewer.classList.remove(
+      "is-pseudo-fullscreen"
+    );
+
+    document.documentElement.classList.remove(
+      "viewer-pseudo-fullscreen"
+    );
+
+    isPseudoFullscreen = false;
+
+    updateFullscreenButtonState();
+  }
+
+
+  /*
+   * 用户通过Esc、浏览器按钮或系统手势
+   * 退出原生全屏时，同步按钮状态。
+   */
+  function handleFullscreenChange() {
+    updateFullscreenButtonState();
+  }
+
+
+  /*
+   * 备用全屏下支持Esc退出。
+   */
+  function handleFullscreenKeydown(event) {
+    if (
+      event.key === "Escape" &&
+      isPseudoFullscreen
+    ) {
+      exitPseudoFullscreen();
+    }
+  }
+
+
   async function toggleFullscreen() {
+    if (fullscreenTransitionPending) {
+      return;
+    }
+
+    setFullscreenPending(true);
+
     try {
+      /*
+       * 当前处于系统级全屏：
+       * 退出系统级全屏。
+       */
       if (
         document.fullscreenElement ===
         viewer
       ) {
-        await document
-          .exitFullscreen();
-      } else {
-        await viewer
-          .requestFullscreen();
+        await document.exitFullscreen();
+
+        return;
       }
-    } catch (error) {
-      console.error(
-        "无法切换全屏状态：",
-        error
-      );
+
+
+      /*
+       * 当前处于备用全屏：
+       * 退出备用全屏。
+       */
+      if (isPseudoFullscreen) {
+        exitPseudoFullscreen();
+
+        return;
+      }
+
+
+      /*
+       * 电脑端和安卓优先调用原生全屏。
+       */
+      if (
+        typeof viewer.requestFullscreen ===
+        "function"
+      ) {
+        try {
+          await viewer.requestFullscreen();
+
+          if (
+            document.fullscreenElement ===
+            viewer
+          ) {
+            return;
+          }
+        } catch (error) {
+          console.warn(
+            "原生全屏不可用，改用网页内全屏：",
+            error
+          );
+        }
+      }
+
+
+      /*
+       * requestFullscreen不存在或失败时，
+       * 使用iPhone备用全屏。
+       */
+      enterPseudoFullscreen();
+    } finally {
+      setFullscreenPending(false);
+
+      updateFullscreenButtonState();
     }
   }
 
@@ -2490,6 +2644,16 @@ function createViewer(
     );
   }
 
+  document.addEventListener(
+    "fullscreenchange",
+    handleFullscreenChange
+  );
+
+  document.addEventListener(
+    "keydown",
+    handleFullscreenKeydown
+  );
+
   fullscreenButton?.addEventListener(
     "click",
     toggleFullscreen
@@ -2511,6 +2675,42 @@ function createViewer(
   ============================ */
 
   function destroy() {
+    /*
+     * 切换到其他Astro页面之前，
+     * 清理备用全屏及页面滚动锁定。
+     */
+    if (isPseudoFullscreen) {
+      exitPseudoFullscreen();
+    }
+
+
+    /*
+     * 如果页面切换时仍处于原生全屏，
+     * 请求浏览器退出。
+     */
+    if (
+      document.fullscreenElement ===
+        viewer &&
+      typeof document.exitFullscreen ===
+        "function"
+    ) {
+      const exitPromise =
+        document.exitFullscreen();
+
+      exitPromise?.catch(() => {});
+    }
+
+
+    document.removeEventListener(
+      "fullscreenchange",
+      handleFullscreenChange
+    );
+
+    document.removeEventListener(
+      "keydown",
+      handleFullscreenKeydown
+    );
+
     destroyed = true;
 
     window.cancelAnimationFrame(

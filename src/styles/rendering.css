@@ -325,7 +325,16 @@
 
   cursor: pointer;
 
+  -webkit-tap-highlight-color:
+    transparent;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  touch-action: manipulation;
+
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
   transition:
     background 0.25s ease,
@@ -340,17 +349,36 @@
   top: 76px;
 }
 
+.reset-view-icon {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .background-toggle-btn {
   top: 132px;
 }
 
-.fullscreen-btn:hover,
-.reset-view-btn:hover,
-.background-toggle-btn:hover {
-  background:
-    rgba(255, 255, 255, 0.18);
+/*
+ * 只有真正支持鼠标悬停的设备
+ * 才启用hover效果。
+ */
+@media (hover: hover) and (pointer: fine) {
+  .fullscreen-btn:hover,
+  .reset-view-btn:hover,
+  .background-toggle-btn:hover {
+    background:
+      rgba(255, 255, 255, 0.18);
 
-  transform: scale(1.06);
+    transform: scale(1.06);
+  }
 }
 
 .fullscreen-btn:active,
@@ -359,35 +387,151 @@
   transform: scale(0.96);
 }
 
+/*
+ * 手机和平板使用粗指针触摸，
+ * 强制取消浏览器模拟并保留的hover状态。
+ */
+@media (pointer: coarse) {
+  .fullscreen-btn:hover,
+  .reset-view-btn:hover,
+  .background-toggle-btn:hover {
+    background:
+      rgba(20, 20, 20, 0.45);
+
+    transform: none;
+  }
+
+
+  /*
+   * 只在手指实际按下时显示反馈。
+   */
+  .fullscreen-btn:active,
+  .reset-view-btn:active,
+  .background-toggle-btn:active {
+    background:
+      rgba(255, 255, 255, 0.18);
+
+    transform: scale(0.96);
+  }
+}
+
+.fullscreen-btn:focus-visible,
+.reset-view-btn:focus-visible,
+.background-toggle-btn:focus-visible {
+  outline:
+    1px solid
+    rgba(255, 255, 255, 0.9);
+
+  outline-offset: 4px;
+}
+
+.fullscreen-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+
+  transform: none;
+}
+
 
 /* ======================
    Viewer Fullscreen
 ====================== */
 
-.viewer:fullscreen {
+/*
+ * :fullscreen：电脑和安卓支持的系统级全屏。
+ * .is-pseudo-fullscreen：iPhone等不支持普通元素全屏时，使用网页内备用全屏。
+ */
+
+.viewer:fullscreen,
+.viewer.is-pseudo-fullscreen {
   width: 100vw;
+
   height: 100vh;
+  height: 100dvh;
+
   min-height: 0;
+  max-height: none;
 
   border-radius: 0;
 }
 
+
+/* iPhone备用全屏 */
+.viewer.is-pseudo-fullscreen {
+  position: fixed;
+  z-index: 500;
+  inset: 0;
+}
+
+
+/* 备用全屏时禁止后面的页面滚动 */
+html.viewer-pseudo-fullscreen,
+html.viewer-pseudo-fullscreen body {
+  overflow: hidden;
+
+  overscroll-behavior: none;
+}
+
+
+/*
+ * 普通移动端允许上下滑动页面，
+ * 但进入全屏后，触摸操作全部交给模型。
+ */
+.viewer:fullscreen .viewer-canvas,
+.viewer.is-pseudo-fullscreen
+.viewer-canvas {
+  touch-action: none !important;
+}
+
+
+/*
+ * 全屏按钮避开iPhone刘海和安全区域。
+ */
 .viewer:fullscreen .fullscreen-btn,
 .viewer:fullscreen .reset-view-btn,
-.viewer:fullscreen .background-toggle-btn {
-  right: 28px;
+.viewer:fullscreen .background-toggle-btn,
+.viewer.is-pseudo-fullscreen
+.fullscreen-btn,
+.viewer.is-pseudo-fullscreen
+.reset-view-btn,
+.viewer.is-pseudo-fullscreen
+.background-toggle-btn {
+  right:
+    calc(
+      28px +
+      env(safe-area-inset-right, 0px)
+    );
 }
 
-.viewer:fullscreen .fullscreen-btn {
-  top: 28px;
+.viewer:fullscreen .fullscreen-btn,
+.viewer.is-pseudo-fullscreen
+.fullscreen-btn {
+  top:
+    calc(
+      28px +
+      env(safe-area-inset-top, 0px)
+    );
 }
 
-.viewer:fullscreen .reset-view-btn {
-  top: 84px;
+.viewer:fullscreen .reset-view-btn,
+.viewer.is-pseudo-fullscreen
+.reset-view-btn {
+  top:
+    calc(
+      84px +
+      env(safe-area-inset-top, 0px)
+    );
 }
 
-.viewer:fullscreen .background-toggle-btn {
-  top: 140px;
+.viewer:fullscreen
+.background-toggle-btn,
+.viewer.is-pseudo-fullscreen
+.background-toggle-btn {
+  top:
+    calc(
+      140px +
+      env(safe-area-inset-top, 0px)
+    );
 }
 
 
@@ -1218,9 +1362,9 @@ html.still-viewer-open body {
   /* Three.js Viewer */
 
   .viewer {
-    height: 55svh;
+    height: 60svh;
     min-height: 360px;
-    max-height: 520px;
+    max-height: 580px;
 
     border-radius: 18px;
   }

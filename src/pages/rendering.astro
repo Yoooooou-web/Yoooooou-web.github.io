@@ -437,10 +437,8 @@ const displayedStillProjects =
                   <button
                     class="fullscreen-btn"
                     type="button"
-                    aria-label={
-                      rendering
-                        .fullscreenLabel
-                    }
+                    aria-label={rendering.fullscreenLabel}
+                    aria-pressed="false"
                   >
                     ⛶
                   </button>
@@ -452,15 +450,21 @@ const displayedStillProjects =
                   <button
                     class="reset-view-btn"
                     type="button"
-                    aria-label={
-                      rendering.resetLabel
-                    }
+                    aria-label={rendering.resetLabel}
                   >
-                    <span
+                    <svg
+                      class="reset-view-icon"
+                      viewBox="0 0 24 24"
                       aria-hidden="true"
+                      focusable="false"
                     >
-                      ↺
-                    </span>
+                      <path
+                        d="M5.5 8.5A7 7 0 1 1 5 14"
+                      />
+                      <path
+                        d="M5.5 4.5v4h4"
+                      />
+                    </svg>
                   </button>
 
 
