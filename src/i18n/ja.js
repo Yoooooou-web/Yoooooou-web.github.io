@@ -157,7 +157,7 @@ const ja = {
         {
           dateStart: "2023.02",
           dateEnd: "2023.09",
-          company: "広州美宜駿動漫科技有限公司",
+          company: "広州美誼聯動漫科技有限公司",
           position: "3D Designer",
           description:
             "製品の3Dモデリングとレンダリングを担当しました。",

@@ -158,7 +158,7 @@ const zh = {
         {
           dateStart: "2023.02",
           dateEnd: "2023.09",
-          company: "广州美宜骏动漫科技有限公司",
+          company: "广州美谊联动漫科技有限公司",
           position: "3D设计师",
           description:
             "主要负责产品的3D建模、材质制作及渲染工作。",

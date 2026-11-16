@@ -159,7 +159,7 @@ const en = {
           dateStart: "2023.02",
           dateEnd: "2023.09",
           company:
-            "Guangzhou Meiyijun Animation Technology Co., Ltd.",
+            "Guangzhou Meiyilian Anime Technology Co., Ltd.",
           position: "3D Designer",
           description:
             "Responsible for product 3D modeling and rendering.",
